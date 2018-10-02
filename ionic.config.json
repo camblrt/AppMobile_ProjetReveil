@@ -1,0 +1,7 @@
+{
+  "name": "reveil-app",
+  "integrations": {
+    "cordova": {}
+  },
+  "type": "ionic-angular"
+}
