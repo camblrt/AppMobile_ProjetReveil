@@ -1,0 +1,34 @@
+<ion-header>
+    <ion-navbar>
+        <ion-title>
+            Connexion
+        </ion-title>
+    </ion-navbar>
+</ion-header>
+<ion-content padding>
+  <h3>Connectez-vous:</h3>
+  <form #loginForm="ngForm" (ngSubmit)="connexion()" autocomplete="off">
+      <ion-row>
+          <ion-col>
+              <ion-list inset>
+              <ion-item>
+                  <ion-input placeholder="Email" name="username" id="loginField"
+                               required type="text" [(ngModel)]="login" #email></ion-input>
+              </ion-item>
+              <ion-item>
+                  <ion-input placeholder="Mot de passe" name="password" id="passwordField"
+                              type="password" required [(ngModel)]="password"></ion-input>
+              </ion-item>
+              </ion-list>
+          </ion-col>
+      </ion-row>
+      <ion-row>
+          <ion-col>
+              <div *ngIf="error" class="alert alert-danger">{{error}}</div>
+              <button ion-button class="submit-btn" full type="submit"
+                      [disabled]="!loginForm.form.valid" >Connexion
+              </button>
+          </ion-col>
+      </ion-row>
+  </form>
+</ion-content>

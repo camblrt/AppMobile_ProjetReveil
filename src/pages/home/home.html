@@ -1,14 +1,21 @@
 <ion-header>
   <ion-navbar>
     <ion-title>
-      Ionic Blank
+      Bienvenue
     </ion-title>
   </ion-navbar>
 </ion-header>
 
-<ion-content padding>
-  The world is your oyster.
-  <p>
-    If you get lost, the <a href="http://ionicframework.com/docs/v2">docs</a> will be your guide.
-  </p>
+<ion-content class="home" padding>
+
+    <div class="center">
+      <h3>Bienvenue sur Réveil Utile!</h3>
+      <p class="ionic-logo"></p>
+    </div>
+
+    <div padding>
+      <button ion-button full (click)='connexion();'>Connexion</button>
+      <button ion-button full (click)='register();'>Nouvel utilisateur</button>
+    </div>
+
 </ion-content>
