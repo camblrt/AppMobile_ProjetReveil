@@ -29,12 +29,23 @@
     "@ionic-native/toast": "4.15.0",
     "@ionic/storage": "2.2.0",
     "cordova-android": "7.1.1",
-    "cordova-plugin-geolocation": "4.0.1",
+    "cordova-plugin-badge": "^0.8.7",
+    "cordova-plugin-device": "^2.0.2",
+    "cordova-plugin-geolocation": "^4.0.1",
+    "cordova-plugin-ionic-keyboard": "^2.1.3",
+    "cordova-plugin-ionic-webview": "^2.2.0",
+    "cordova-plugin-local-notification": "^0.9.0-beta.2",
+    "cordova-plugin-splashscreen": "^5.0.2",
+    "cordova-plugin-statusbar": "^2.4.2",
+    "cordova-plugin-whitelist": "^1.3.3",
+    "cordova-plugin-x-toast": "^2.7.0",
+    "cordova-sqlite-storage": "^2.4.0",
     "ionic-angular": "3.9.2",
     "ionicons": "3.0.0",
     "moment": "2.22.2",
     "rxjs": "5.5.11",
     "sw-toolbox": "3.6.0",
+    "uk.co.workingedge.cordova.plugin.sqliteporter": "^1.0.5",
     "zone.js": "0.8.26"
   },
   "devDependencies": {
@@ -49,7 +60,19 @@
     "plugins": {
       "cordova-plugin-geolocation": {
         "GEOLOCATION_USAGE_DESCRIPTION": "To locate you"
-      }
+      },
+      "cordova-plugin-whitelist": {},
+      "cordova-plugin-statusbar": {},
+      "cordova-plugin-device": {},
+      "cordova-plugin-splashscreen": {},
+      "cordova-plugin-ionic-webview": {
+        "ANDROID_SUPPORT_ANNOTATIONS_VERSION": "27.+"
+      },
+      "cordova-plugin-ionic-keyboard": {},
+      "uk.co.workingedge.cordova.plugin.sqliteporter": {},
+      "cordova-sqlite-storage": {},
+      "cordova-plugin-x-toast": {},
+      "cordova-plugin-local-notification": {}
     }
   }
 }
