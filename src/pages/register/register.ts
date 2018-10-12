@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import {  IonicPage, NavController , AlertController} from 'ionic-angular';
-import { DatabaseUserProvider } from '../../providers/database-user/database-user';
-import { SQLite, SQLiteObject } from '@ionic-native/sqlite';
+import { DatabaseProvider } from '../../providers/database/database';
+import { SQLite } from '@ionic-native/sqlite';
 import { Toast } from '@ionic-native/toast';
 
 @IonicPage()
@@ -16,7 +16,7 @@ export class RegisterPage {
 
   constructor(public navCtrl: NavController, 
               public alertCtrl: AlertController,
-              public databaseUser: DatabaseUserProvider,
+              public databaseUser: DatabaseProvider,
               private sqlite: SQLite,
               private toast: Toast) { }
 
