@@ -1,7 +1,7 @@
 <ion-header>
   <ion-navbar color="primary">
     <ion-title>
-      ALARM CLOCK
+      Set Alarm
     </ion-title>
   </ion-navbar>
 </ion-header>
@@ -11,12 +11,12 @@
     <ion-list no-lines>
  
         <ion-item>
-          <ion-label>Set Alarm time:</ion-label>
-          <ion-datetime displayFormat="h:mm A" pickerFormat="h mm A" [(ngModel)]="notifyTime" (ionChange)="timeChange($event)"></ion-datetime>
+            <ion-input  type="text" value=""  placeholder="Nom de l'alarm" [(ngModel)]="nameAlarm"></ion-input>
         </ion-item>
- 
         <ion-item>
-            <ion-label>On the following days:</ion-label>
+          <ion-label>Time:</ion-label>
+          <ion-datetime displayFormat="h:mm A" pickerFormat="h mm A" [(ngModel)]="notifyTime"
+          display=left (ionChange)="timeChange($event)"></ion-datetime>
         </ion-item>
  
         <ion-item *ngFor="let day of days">
@@ -24,6 +24,9 @@
             <ion-checkbox [(ngModel)]="day.checked" color="primary"></ion-checkbox>
         </ion-item>
  
+        <ion-item>
+                <ion-label>Son: //TODO</ion-label>
+            </ion-item>
     </ion-list>
  
 </ion-content>

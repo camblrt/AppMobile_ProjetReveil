@@ -21,6 +21,7 @@ import { pluginWarn } from '@ionic-native/core';
 })
 export class ClockPage {
 
+  nameAlarm: string;
   notifyTime: any;
   notifications: any[] = [];
   days: any[];
@@ -28,6 +29,8 @@ export class ClockPage {
   chosenMinutes: number;
 
   constructor(private toast: Toast, public localNotifications: LocalNotifications, public navCtrl: NavController, public navParams: NavParams,  public platform: Platform,  public alertCtrl: AlertController) {
+
+    this.nameAlarm = "";
 
     this.notifyTime = moment(new Date()).format();
 
@@ -79,10 +82,15 @@ export class ClockPage {
         firstNotificationTime.setHours(this.chosenHours + (24 * (dayDifference)));
         firstNotificationTime.setMinutes(this.chosenMinutes);
         firstNotificationTime.setSeconds(0);
+
+        //to test easyli
+        firstNotificationTime = new Date(new Date().getTime() + 600);
         console.log("Fist notification time=",firstNotificationTime);
 
+        console.log(this.nameAlarm)
+
         let notification = {
-            title: 'ALARM',
+            title: this.nameAlarm,
             text: 'Its time to get Up:)',
             trigger : {firstAt: firstNotificationTime, 
               every: 'minute',
@@ -128,7 +136,7 @@ export class ClockPage {
     }
   }
  
-    cancelAll(){
+  cancelAll(){
       this.localNotifications.cancelAll();
       let alert = this.alertCtrl.create({
           title: 'Alarm cancelled',
