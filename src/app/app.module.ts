@@ -3,7 +3,7 @@ import { ErrorHandler, NgModule } from '@angular/core';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
-import { SQLite, SQLiteObject } from '@ionic-native/sqlite';
+import { SQLite } from '@ionic-native/sqlite';
 import { Toast } from '@ionic-native/toast';
 import {LocalNotifications} from "@ionic-native/local-notifications"
 import { HttpClientModule } from "@angular/common/http"
@@ -15,8 +15,7 @@ import { LoginPage } from '../pages/login/login';
 import { RegisterPage } from '../pages/register/register';
 import { ClockPage } from '../pages/clock/clock';
 import { DatabaseProvider } from '../providers/database/database';
-import { NotificationOpenPage } from '../pages/notification-open/notification-open'
-import { DatabaseUserProvider } from '../providers/database-user/database-user';
+import { NotificationOpenPage } from '../pages/notification-open/notification-open';
 
 
 @NgModule({
@@ -50,8 +49,7 @@ import { DatabaseUserProvider } from '../providers/database-user/database-user';
     DatabaseProvider,
     SQLite,
     Toast,
-    Geolocation,
-    DatabaseUserProvider
+    Geolocation
   ]
 })
 export class AppModule {}

@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { NavController, AlertController} from 'ionic-angular';
-import { SQLite, SQLiteObject } from '@ionic-native/sqlite';
+import { SQLite } from '@ionic-native/sqlite';
 import {ClockPage} from '../clock/clock';
-import { DatabaseUserProvider } from '../../providers/database-user/database-user';
+import { DatabaseProvider } from '../../providers/database/database';
 
 @Component({
   selector: 'page-login',
@@ -22,7 +22,7 @@ export class LoginPage {
   constructor(public navCtrl: NavController, 
               public alertCtrl: AlertController,
               private sqlite: SQLite,
-              public databaseUser: DatabaseUserProvider) { 
+              public databaseUser: DatabaseProvider) { 
 
               }
 
