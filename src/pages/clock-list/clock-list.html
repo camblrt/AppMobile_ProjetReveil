@@ -1,0 +1,19 @@
+<ion-header>
+    <ion-navbar color="primary">
+      <ion-title>
+        Liste des Alarmes
+      </ion-title>
+    </ion-navbar>
+  </ion-header>
+   
+  <ion-content>
+   
+      <ion-list no-lines>
+
+          <ion-item *ngFor="let day of days">
+              <ion-label>{{names}}  {{days}}  {{hours}}  {{minutes}}  {{activated}}</ion-label>
+          </ion-item>
+      </ion-list>
+  </ion-content>
+   
+  <ion-footer>

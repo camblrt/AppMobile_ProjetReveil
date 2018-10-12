@@ -1,3 +1,4 @@
+import { ClockListPage } from './../clock-list/clock-list';
 import { ClockPage } from './../clock/clock';
 import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
@@ -17,7 +18,7 @@ export class HomePage {
               public databaseUser: DatabaseUserProvider) {}
 
   connexion(){
-    this.navCtrl.push(LoginPage);
+    this.navCtrl.push(ClockListPage);
   }
 
   register(){

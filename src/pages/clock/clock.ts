@@ -84,7 +84,7 @@ export class ClockPage {
         firstNotificationTime.setSeconds(0);
 
         //to test easyli
-        firstNotificationTime = new Date(new Date().getTime() + 600);
+        firstNotificationTime = new Date(new Date().getTime() + 10000);
         console.log("Fist notification time=",firstNotificationTime);
 
         console.log(this.nameAlarm)
@@ -93,16 +93,17 @@ export class ClockPage {
             title: this.nameAlarm,
             text: 'Its time to get Up:)',
             trigger : {firstAt: firstNotificationTime, 
-              every: 'minute',
-              count: 1445}
+              every: 'week',
+              count: 1000}
         };
         this.notifications.push(notification);
       }
     } 
+  }
 
-      
+  createNotification(notifications){
     this.toast.show(`Scheduling notification`, '5000', 'center').subscribe(toast => {
-        console.log(toast);
+      console.log(toast);
     });
 
     // Cancel any existing notifications
@@ -118,10 +119,6 @@ export class ClockPage {
 
       //What to do when click on notification
       this.localNotifications.on('click').subscribe(() => {
-        let alert = this.alertCtrl.create({
-              title: 'Bonjour ! '
-        });
-        alert.present();
         this,this.navCtrl.push(NotificationOpenPage);
       });
 

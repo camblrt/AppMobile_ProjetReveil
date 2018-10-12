@@ -17,6 +17,7 @@ import { ClockPage } from '../pages/clock/clock';
 import { DatabaseProvider } from '../providers/database/database';
 import { NotificationOpenPage } from '../pages/notification-open/notification-open'
 import { DatabaseUserProvider } from '../providers/database-user/database-user';
+import { ClockListPage } from '../pages/clock-list/clock-list';
 
 
 @NgModule({
@@ -26,7 +27,8 @@ import { DatabaseUserProvider } from '../providers/database-user/database-user';
     LoginPage,
     RegisterPage,
     ClockPage,
-    NotificationOpenPage
+    NotificationOpenPage,
+    ClockListPage
   ],
   imports: [
     BrowserModule,
@@ -40,7 +42,8 @@ import { DatabaseUserProvider } from '../providers/database-user/database-user';
     LoginPage,
     ClockPage,
     RegisterPage,
-    NotificationOpenPage
+    NotificationOpenPage,
+    ClockListPage
   ],
   providers: [
     StatusBar,
