@@ -1,9 +1,9 @@
+import { ClockListPage } from './../clock-list/clock-list';
 
 import { Toast } from '@ionic-native/toast';
 import { Component } from '@angular/core';
 import { NavController, NavParams, Platform, AlertController } from 'ionic-angular';
 import { LocalNotifications } from '@ionic-native/local-notifications';
-import { NotificationOpenPage } from './../notification-open/notification-open'
 import * as moment from 'moment';
 import { Storage } from '@ionic/storage';
 import { DatabaseProvider } from './../../providers/database/database';
@@ -24,40 +24,43 @@ import { DatabaseProvider } from './../../providers/database/database';
 export class ClockPage {
 
   nameAlarm: string;
-  notifyTime: any;
-  notifications: any[] = [];
+  notifications: any[];
   days: any[];
+  dayDB: string;
   chosenHours: number;
   chosenMinutes: number;
-  currentUser: string;
+  notifyTime;
+  son: string;
 
   constructor(private toast: Toast, public localNotifications: LocalNotifications, 
     public navCtrl: NavController, public navParams: NavParams,  public platform: Platform,  
     public alertCtrl: AlertController,  private storage: Storage, public dataBase: DatabaseProvider) {
 
-    this.nameAlarm = "";
+      this.days = [
+        {title: 'Lundi', dayCode: 1, checked: false},
+        {title: 'Mardi', dayCode: 2, checked: false},
+        {title: 'Mercredi', dayCode: 3, checked: false},
+        {title: 'Jeudi', dayCode: 4, checked: false},
+        {title: 'Vendredi', dayCode: 5, checked: false},
+        {title: 'Samedi', dayCode: 6, checked: false},
+        {title: 'Dimanche', dayCode: 0, checked: false}];
 
-    this.notifyTime = moment(new Date()).format();
-
-    this.chosenHours = new Date().getHours();
-    this.chosenMinutes = new Date().getMinutes();
-
-    this.storage.get('current_username').then(data => {
-      console.log('localstorage gave me ' + data);
-      this.currentUser = data
-    });
-
-    this.days = [
-        {title: 'Monday', dayCode: 1, checked: false},
-        {title: 'Tuesday', dayCode: 2, checked: false},
-        {title: 'Wednesday', dayCode: 3, checked: false},
-        {title: 'Thursday', dayCode: 4, checked: false},
-        {title: 'Friday', dayCode: 5, checked: false},
-        {title: 'Saturday', dayCode: 6, checked: false},
-        {title: 'Sunday', dayCode: 0, checked: false}
-    ];
-
-  
+     this.storage.get('current_username').then((userIs) => {
+        this.dataBase.selectClockForUserInDB(userIs).then(data => {      
+          let lengthDB = data.rows.length;
+          for(var i=0; i<lengthDB; i++){
+            this.nameAlarm = data.rows.item(i).nom;
+            this.chosenHours = data.rows.item(i).heure;
+            this.chosenMinutes = data.rows.item(i).minute;
+            this.dayDB = data.rows.item(i).jour;
+            this.son = data.rows.item(i).son;
+            }
+            this.dbTOpagesDays(this.dayDB)
+          })
+        .catch(error => {
+            console.log(error.message);
+          });
+      }); 
   }
 
   ionViewDidLoad(){
@@ -72,9 +75,29 @@ export class ClockPage {
     }); 
   }
 
+  dbTOpagesDays(dayDB){
+    console.log(dayDB)
+    if(dayDB.includes("Lundi")){
+      this.days[0].checked = true;
+    }
+    if(dayDB.includes("Mardi")){
+      this.days[1].checked = true;
+    }
+    if(dayDB.includes("Mercredi")){
+      this.days[2].checked = true;
+    }
+    if(dayDB.includes("Jeudi")){
+      this.days[3].checked = true;
+    }
+    if(dayDB.includes("Vendredi")){
+      this.days[4].checked = true;
+    }
+  }
+
   timeChange(time){
     this.chosenHours = time.hour;
     this.chosenMinutes = time.minute;
+    console.log("Heure : "+ this.chosenHours + " Minutes : " + this.chosenMinutes)
   }
 
   addNotifications(){
@@ -85,6 +108,7 @@ export class ClockPage {
         let firstNotificationTime = new Date();
         let dayDifference = day.dayCode - currentDay;
 
+        //this.dayDB += day.title + " " ;
         if(dayDifference < 0){
             dayDifference = dayDifference + 7; // for cases where the day is in the following week
         }
@@ -98,17 +122,17 @@ export class ClockPage {
         console.log("Fist notification time=",firstNotificationTime);
 
         let notification = {
-            title: this.nameAlarm,
-            text: 'Its time to get Up:)',
+            title: "Brut",
+            text: 'Its time to get Up:',
             trigger : {firstAt: firstNotificationTime, 
               every: 'minute',
-              count: 1000,
-              sound:'file://sounds/chicken.mp3'             }
+              count: 1000}
         };
-        this.notifications.push(notification);
+        console.log("Push notification : " + notification)
+        //this.notifications.push(notification);
       }
-      
     } 
+
 
     this.toast.show(`Scheduling notification`, '2000', 'center').subscribe(toast => {
       console.log(`Scheduling notification`);
@@ -117,10 +141,14 @@ export class ClockPage {
     // Cancel any existing notifications
     this.localNotifications.cancelAll().then(() => {
 
-      this.dataBase.updateClockForUserInDB(this.nameAlarm, this.chosenHours, this.chosenMinutes, "test jour","test son",this.currentUser);
+      this.storage.get('current_username').then((val) => {
+        console.log("Jour :  " + this.dayDB + "  User =  " + val)
+        this.dataBase.updateClockForUserInDB(this.nameAlarm, this.chosenHours, this.chosenMinutes, this.dayDB,"test son",val);
+      })
+      
       
       // Schedule the new notifications
-      this.localNotifications.schedule(this.notifications);
+      //this.localNotifications.schedule(this.notifications);
       
       this.notifications = [];
 
@@ -130,7 +158,7 @@ export class ClockPage {
 
       //What to do when click on notification
       this.localNotifications.on('click').subscribe(() => {
-        this,this.navCtrl.push(NotificationOpenPage);
+       this.navCtrl.push(ClockListPage);
       });
 
       this.navCtrl.pop();

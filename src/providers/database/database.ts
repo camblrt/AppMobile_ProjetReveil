@@ -12,10 +12,12 @@ import { Toast } from '@ionic-native/toast';
 export class DatabaseProvider {
   db: SQLiteObject;
   dbReady: Promise<any>;
+  dbClockReady: Promise<any>;
 
   constructor(private sqlite: SQLite,
               private toast: Toast) {
     this.dbReady = this.createDBUser();
+    this.dbClockReady = this.createDBClock();
     console.log('Hello DatabaseUserProvider Provider');
 
     this.selectUserFromDataBase();
@@ -36,9 +38,9 @@ export class DatabaseProvider {
 
     return this.db.executeSql('INSERT INTO user VALUES(?,?)',[username, password])
       .then(res => {
-        console.log(res);
+        console.log("New user"+ res);
         this.toast.show('User registered', '5000', 'center');
-        this.insertNewClockInDataBase("New", 0,0,"New","New",username);
+        this.insertNewClockInDataBase("Nouvelle Alarme", 0,0,"Lundi Jeudi","Nouveau Son",username);
       }).catch(error => {
         console.log(error.message);
       });
@@ -68,27 +70,26 @@ export class DatabaseProvider {
   }
 
   async insertNewClockInDataBase(nom: String, heure: Number, minute: Number, jour: String, son: String, user: String){
-    await this.dbReady;
+    await this.dbClockReady;
 
     return this.db.executeSql('INSERT INTO clock (nom, heure, minute, jour, son, user) VALUES(?,?,?,?,?,?)',[nom, heure, minute, jour, son, user])
       .then(res => {
-        console.log(res);
-        this.toast.show('User registered', '5000', 'center');
+        console.log("New clock"+ res);
+        this.toast.show('Clock registered', '5000', 'center');
       }).catch(error => {
         console.log(error.message);
       });
   }
 
+  //debug methode
   async selectClockFromDataBase(){
-    await this.dbReady;
+    await this.dbClockReady;
 
     var dataClockInDB = {nom: "", heure: 0, minute: 0, jour: "", son: "", user: ""};
     var lengthClockDB;
     this.db.executeSql('select * from clock', [])
       .then(data => {
-        console.log("Data: " + data);
         lengthClockDB = data.rows.length;
-        console.log("Length: " + lengthClockDB);
         for(var i=0; i<lengthClockDB; i++){
           dataClockInDB.nom = data.rows.item(i).nom;
           dataClockInDB.heure = data.rows.item(i).heure;
@@ -104,43 +105,24 @@ export class DatabaseProvider {
       .catch(error => {
         console.log(error.message);
       });
-      
-    return dataClockInDB;
+      return
   }
 
   async selectClockForUserInDB(username: string){
-    await this.dbReady;
+    await this.dbClockReady;
     
-    var dataClock = {nom:"", heure:"", minute:"",jour:"",son:""};
+    var dataClock = {nom:"", heure: 0, minute: 0,jour:"",son:""};
     var lengthDB = 0;
     
-    this.db.executeSql('select * from clock where user=?', [username])
-    .then(data => {
-      lengthDB = data.rows.length;
-      for(var i=0; i<lengthDB; i++){
-        dataClock.nom = data.rows.item(i).nom;
-        dataClock.heure = data.rows.item(i).heure;
-        dataClock.minute = data.rows.item(i).minute;
-        dataClock.jour = data.rows.item(i).jour;
-        dataClock.son = data.rows.item(i).son;
-        }
-      })
-    .catch(error => {
-        console.log(error.message);
-      });
-    return dataClock
+    return  this.db.executeSql('select * from clock where user=?', [username]);
   }
 
   async updateClockForUserInDB(clockNom: string, heure: Number, minute: Number, jour: string, son: string, user: string) {
-    await this.dbReady;
+    await this.dbClockReady;
     
-    this.sqlite.create({
-      name: 'ionicdb.db',
-      location: 'default'
-    }).then((db: SQLiteObject) => {
-      db.executeSql('UPDATE clock SET nom=?,heure=?,minutes=?,jour=?,son=? WHERE user=?',[clockNom,heure,minute,jour,son,user])
+    this.db.executeSql('UPDATE clock SET nom=?,heure=?,minute=?,jour=?,son=? WHERE user=?',[clockNom,heure,minute,jour,son,user])
         .then(res => {
-          console.log(res);
+          console.log("Update ok : " + res);
           this.toast.show('Data updated', '5000', 'center');
         })
         .catch(e => {
@@ -151,13 +133,6 @@ export class DatabaseProvider {
             }
           );
         });
-    }).catch(e => {
-      console.log(e);
-      this.toast.show(e, '5000', 'center').subscribe(
-        toast => {
-          console.log(toast);
-        }
-      );
-    });
+
   }
 }

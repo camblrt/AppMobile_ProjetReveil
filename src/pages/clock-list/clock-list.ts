@@ -2,6 +2,7 @@ import { DatabaseProvider } from './../../providers/database/database';
 import { ClockPage } from './../clock/clock';
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, Platform } from 'ionic-angular';
+import { Storage } from '@ionic/storage';
 /**
  * Generated class for the ClockListPage page.
  *
@@ -16,44 +17,45 @@ import { IonicPage, NavController, NavParams, Platform } from 'ionic-angular';
 })
 export class ClockListPage {
   
-  names: string[];
-  days: any[];
-  hours: string[];
-  minutes: string[];
-  son: string[];
+  name: string;
+  days: string;
+  hours: number;
+  minutes: number;
+  son: string;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public dataBaseProviser: DatabaseProvider) {
+  constructor(public navCtrl: NavController,
+              public navParams: NavParams, 
+              public dataBaseProviser: DatabaseProvider,
+              private storage: Storage) {
 
     this.dataBaseProviser.createDBClock();
 
-    this.names=[];
-    this.days=[];
-    this.hours=[];
-    this.minutes=[];
-    this.son=[];
-
-    var dataClock = {nom:"", heure:"", minute:"",jour:"",son:""};
-    var lengthDB = 0;
+    this.name="Pas d'alarmes";
+    this.days="Pas d'alarmes";
+    this.hours=0;
+    this.minutes=0;
+    this.son="Pas d'alarmes";
     
-    this.dataBaseProviser.selectClockForUserInDB("Q").then( data => {
-
-      if(data != null){
-        this.names.push(data.nom);
-        this.days.push(data.jour);
-        this.hours.push(data.heure );
-        this.minutes=[];
-        this.son=[];
-      }
-      
-    })
-     // TODO: crée une méthode pour récuperer toutes les alarmes liés à l'user et bind les valeurs des tableaux. 
+    this.storage.get('current_username').then((val) => {
+    this.dataBaseProviser.selectClockForUserInDB(val).then(data => {      
+      let lengthDB = data.rows.length;
+      for(var i=0; i<lengthDB; i++){
+        this.name = data.rows.item(i).nom;
+        this.hours = data.rows.item(i).heure;
+        this.minutes = data.rows.item(i).minute;
+        this.days = data.rows.item(i).jour;
+        this.son = data.rows.item(i).son;
+        }
+      })
+    .catch(error => {
+        console.log(error.message);
+      });
+  });
+}
+  getFromDB(){
+    this.dataBaseProviser.selectClockFromDataBase();
   }
-
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad ClockListPage');
-  }
-
-  createNewClock(){
+  modifyClock(){
     this.navCtrl.push(ClockPage)
   }
 }
