@@ -38,9 +38,19 @@ $colors: (
   secondary:  #32db64,
   danger:     #f53d3d,
   light:      #f4f4f4,
-  dark:       #222
+  dark:       #222,
+  orange: #FF4500
 );
 
+$toolbar-md-title-text-color: #eeeeee;
+$toolbar-ios-title-text-color: #eeeeee;
+$toolbar-wp-title-text-color: #eeeeee;
+
+$toolbar-background: #FF4500;
+
+$background-color: #000000;
+
+$text-color: #eeeeee;
 
 // App iOS Variables
 // --------------------------------------------------

@@ -1,21 +1,31 @@
 <ion-header>
   <ion-navbar>
     <ion-title>
-      Bienvenue
+      Bienvenue {{current_user}}
     </ion-title>
   </ion-navbar>
 </ion-header>
 
-<ion-content class="home" padding>
+<ion-content class="home vertical-align-content" padding>
 
-    <div class="center">
+    <button ion-button round color="orange" (click)='displayClockOfCurrentUser();'>Voir votre réveil</button>
+
+    <button ion-button round outline class="button-home-list" (click)='userList();'>Vous n'etes pas {{current_user}}?</button>   
+
+    <!-- <div class="center">
       <h3>Bienvenue {{current_user}} sur votre application de réveil!</h3>
       <p class="ionic-logo"></p>
-    </div>
-
-    <div padding>
-      <button ion-button full (click)='displayClockOfCurrentUser();'>Voir votre réveil</button>
-      <button ion-button full (click)='userList();'>Vous n'etes pas {{current_user}}?</button>
-    </div>
-
+    </div> -->
 </ion-content>
+
+<!-- <ion-footer no-shadow position="bottom">
+  <ion-grid>
+    <ion-row>
+      <ion-col col-6>
+      </ion-col>
+      <ion-col col-6>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-footer> -->
+	
