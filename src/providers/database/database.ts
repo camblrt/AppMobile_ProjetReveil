@@ -74,15 +74,15 @@ export class DatabaseProvider {
       name: 'ionicdb.db',
       location: 'default'
     });
-    return this.db.executeSql('CREATE TABLE IF NOT EXISTS clock (rowid INTEGER PRIMARY KEY AUTOINCREMENT, nom TEXT, heure TEXT, minute TEXT, jour TEXT, son TEXT, user TEXT)', [])
+    return this.db.executeSql('CREATE TABLE IF NOT EXISTS clock (nom TEXT PRIMARY KEY, heure INT, minute INT, jour TEXT, son TEXT, user TEXT)', [])
         .then(res => console.log(res))
         .catch(error => console.log(error));
   }
 
-  async insertNewClockInDataBase(nom: String, heure: String, minute: String, jour: String, son: String, user: String){
+  async insertNewClockInDataBase(nom: String, heure: Number, minute: Number, jour: String, son: String, user: String){
     await this.dbReady;
 
-    return this.db.executeSql('INSERT INTO user VALUES(?,?,?,?,?)',[nom, heure, minute, jour, son, user])
+    return this.db.executeSql('INSERT INTO clock (nom, heure, minute, jour, son, user) VALUES(?,?,?,?,?,?)',[nom, heure, minute, jour, son, user])
       .then(res => {
         console.log(res);
         this.toast.show('User registered', '5000', 'center');
@@ -94,7 +94,7 @@ export class DatabaseProvider {
   async selectClockFromDataBase(){
     await this.dbReady;
 
-    var dataClockInDB = {nom: "", heure: "", minute:"", jour: "", son: "", user: ""};
+    var dataClockInDB = {nom: "", heure: 0, minute: 0, jour: "", son: "", user: ""};
     var lengthClockDB;
     this.db.executeSql('select * from clock', [])
       .then(data => {
@@ -116,16 +116,34 @@ export class DatabaseProvider {
       .catch(error => {
         console.log(error.message);
       });
+      this.db.executeSql('DELETE FROM clock WHERE user="Q"').then().catch();
     return dataClockInDB;
   }
 
   async selectClockForUserInDB(username: string){
     await this.dbReady;
     
-    return this.db.executeSql('select * from clock where login=?', [username]);
+    var dataClock = {nom:"", heure:"", minute:"",jour:"",son:""};
+    var lengthDB = 0;
+    
+    this.db.executeSql('select * from clock where user=?', [username])
+    .then(data => {
+      lengthDB = data.rows.length;
+      for(var i=0; i<lengthDB; i++){
+        dataClock.nom = data.rows.item(i).nom;
+        dataClock.heure = data.rows.item(i).heure;
+        dataClock.minute = data.rows.item(i).minute;
+        dataClock.jour = data.rows.item(i).jour;
+        dataClock.son = data.rows.item(i).son;
+        }
+      })
+    .catch(error => {
+        console.log(error.message);
+      });
+    return dataClock
   }
 
-  updateClockForUserInDB(clockNom: string, heure: string, minute: string, jour: string, son: string, user: string) {
+  updateClockForUserInDB(clockNom: string, heure: Number, minute: Number, jour: string, son: string, user: string) {
     this.sqlite.create({
       name: 'ionicdb.db',
       location: 'default'

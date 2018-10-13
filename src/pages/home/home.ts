@@ -18,7 +18,7 @@ export class HomePage {
               public databaseUser: DatabaseProvider) {}
 
   connexion(){
-    this.navCtrl.push(ClockListPage);
+    this.navCtrl.push(ClockPage);
   }
 
   register(){

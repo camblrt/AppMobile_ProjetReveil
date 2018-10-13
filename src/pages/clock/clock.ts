@@ -6,6 +6,7 @@ import { LocalNotifications } from '@ionic-native/local-notifications';
 import { NotificationOpenPage } from './../notification-open/notification-open'
 import * as moment from 'moment';
 import { pluginWarn } from '@ionic-native/core';
+import { ThrowStmt } from '@angular/compiler';
 
 /**
  * Generated class for the ClockPage page.
@@ -87,23 +88,20 @@ export class ClockPage {
         firstNotificationTime = new Date(new Date().getTime() + 10000);
         console.log("Fist notification time=",firstNotificationTime);
 
-        console.log(this.nameAlarm)
-
         let notification = {
             title: this.nameAlarm,
             text: 'Its time to get Up:)',
             trigger : {firstAt: firstNotificationTime, 
-              every: 'week',
-              count: 1000}
+              every: 'minute',
+              count: 1000,
+              sound:'file://sounds/chicken.mp3'             }
         };
         this.notifications.push(notification);
       }
     } 
-  }
 
-  createNotification(notifications){
-    this.toast.show(`Scheduling notification`, '5000', 'center').subscribe(toast => {
-      console.log(toast);
+    this.toast.show(`Scheduling notification`, '2000', 'center').subscribe(toast => {
+      console.log(`Scheduling notification`);
     });
 
     // Cancel any existing notifications
@@ -114,7 +112,7 @@ export class ClockPage {
       this.notifications = [];
 
       this.toast.show(`Notification scheduled`, '5000', 'center').subscribe(toast => {
-        console.log(toast);
+        console.log("Notification scheduled");
       });
 
       //What to do when click on notification
@@ -122,12 +120,15 @@ export class ClockPage {
         this,this.navCtrl.push(NotificationOpenPage);
       });
 
+      this.navCtrl.pop();
+
     });
+    return
   }
 
   setSound() {
     if (this.platform.is('android')) {
-      return 'file://assets/sounds/shame.mp3'
+      return 'file://assets/sounds/chicken.mp3'
     } else {
       return 'file://assets/sounds/bell.mp3'
     }
