@@ -10,12 +10,12 @@
   </ion-navbar>
 </ion-header>
 
-<ion-content padding>
+<ion-content>
   <ion-list inset>
     <button ion-item *ngFor="let user of dataUsernameInDB" (click)="itemSelected(user)">
       {{ user }}
     </button> 
   </ion-list>
 
-  <button ion-button full (click)='register();'>Vous n'avez pas de compte?</button>
+  <button ion-button round color="orange" full (click)='register();'>Vous n'avez pas de compte?</button>
 </ion-content>

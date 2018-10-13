@@ -1,4 +1,26 @@
 page-home {
+
+    .home {
+        background: url("../../assets/imgs/black_clocks.jpg") no-repeat fixed center;
+        background-size: cover;
+    }
+
+    .button-home-list{
+        border-color: #FF4500;
+        color: #ffffff;
+    }
+
+    .button-home-clock{
+        background-color: #FF4500;
+    }
+
+    .vertical-align-content > *
+    {
+        display: flex!important;
+        align-content: center!important;
+        align-items: center!important;
+    }
+
     .center {
         text-align: center;  
     }
