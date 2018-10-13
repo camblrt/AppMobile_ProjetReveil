@@ -9,11 +9,13 @@
   <ion-content>
    
       <ion-list no-lines>
-
           <ion-item *ngFor="let day of days">
-              <ion-label>{{names}}  {{days}}  {{hours}}  {{minutes}}  {{activated}}</ion-label>
+              <ion-label>{{names}} {{hours}}:{{minutes}} {{activated}}</ion-label>
           </ion-item>
       </ion-list>
+
+      <button (click)="createNewClock()" ion-button round color="primary">+</button>
   </ion-content>
    
   <ion-footer>
+  </ion-footer>

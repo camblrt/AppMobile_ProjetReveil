@@ -1,5 +1,6 @@
+import { ClockPage } from './../clock/clock';
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, Platform } from 'ionic-angular';
 
 /**
  * Generated class for the ClockListPage page.
@@ -32,10 +33,11 @@ export class ClockListPage {
      // TODO: crée une méthode pour récuperer toutes les alarmes liés à l'user et bind les valeurs des tableaux. 
   }
 
-
-
   ionViewDidLoad() {
     console.log('ionViewDidLoad ClockListPage');
   }
 
+  createNewClock(){
+    this.navCtrl.push(ClockPage)
+  }
 }
