@@ -120,19 +120,6 @@ export class DatabaseProvider {
   async updateClockForUserInDB(clockNom: string, heure: Number, minute: Number, jour: string, son: string, user: string) {
     await this.dbClockReady;
     
-    this.db.executeSql('UPDATE clock SET nom=?,heure=?,minute=?,jour=?,son=? WHERE user=?',[clockNom,heure,minute,jour,son,user])
-        .then(res => {
-          console.log("Update ok : " + res);
-          this.toast.show('Data updated', '5000', 'center');
-        })
-        .catch(e => {
-          console.log(e);
-          this.toast.show(e, '5000', 'center').subscribe(
-            toast => {
-              console.log(toast);
-            }
-          );
-        });
-
+    return this.db.executeSql('UPDATE clock SET nom=?,heure=?,minute=?,jour=?,son=? WHERE user=?',[clockNom,heure,minute,jour,son,user])
   }
 }

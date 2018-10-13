@@ -108,7 +108,7 @@ export class ClockPage {
         let firstNotificationTime = new Date();
         let dayDifference = day.dayCode - currentDay;
 
-        //this.dayDB += day.title + " " ;
+        this.dayDB += day.title + " " ;
         if(dayDifference < 0){
             dayDifference = dayDifference + 7; // for cases where the day is in the following week
         }
@@ -119,7 +119,6 @@ export class ClockPage {
 
         //to test easyli
         firstNotificationTime = new Date(new Date().getTime() + 10000);
-        console.log("Fist notification time=",firstNotificationTime);
 
         let notification = {
             title: "Brut",
@@ -140,29 +139,27 @@ export class ClockPage {
 
     // Cancel any existing notifications
     this.localNotifications.cancelAll().then(() => {
-
       this.storage.get('current_username').then((val) => {
-        console.log("Jour :  " + this.dayDB + "  User =  " + val)
-        this.dataBase.updateClockForUserInDB(this.nameAlarm, this.chosenHours, this.chosenMinutes, this.dayDB,"test son",val);
-      })
-      
-      
-      // Schedule the new notifications
-      //this.localNotifications.schedule(this.notifications);
-      
-      this.notifications = [];
+        this.dataBase.updateClockForUserInDB(this.nameAlarm, this.chosenHours, this.chosenMinutes, this.dayDB,"test son",val)
+        .then(resUpdateDB => {
+          console.log("Update ok : " + resUpdateDB);
+          this.toast.show('Data updated', '5000', 'center');
+          // Schedule the new notifications
+          //this.localNotifications.schedule(this.notifications);
+          this.notifications = [];
 
-      this.toast.show(`Notification scheduled`, '5000', 'center').subscribe(toast => {
-        console.log("Notification scheduled");
+          this.toast.show(`Notification scheduled`, '5000', 'center').subscribe(toast => {console.log("Notification scheduled");});
+
+          //What to do when click on notification
+          this.localNotifications.on('click').subscribe(() => {this.navCtrl.push(ClockListPage);});
+
+          this.navCtrl.pop();
+        })
+        .catch(errorUpdateDB => {
+          console.log(errorUpdateDB);
+          this.toast.show(errorUpdateDB, '5000', 'center').subscribe(toast => {console.log("Error update DB");});
+        });
       });
-
-      //What to do when click on notification
-      this.localNotifications.on('click').subscribe(() => {
-       this.navCtrl.push(ClockListPage);
-      });
-
-      this.navCtrl.pop();
-
     });
     return
   }
