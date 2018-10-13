@@ -32,17 +32,19 @@ export class ClockListPage {
     this.minutes=[];
     this.son=[];
 
-    this.dataBaseProviser.selectClockFromDataBase();
-
     var dataClock = {nom:"", heure:"", minute:"",jour:"",son:""};
     var lengthDB = 0;
     
     this.dataBaseProviser.selectClockForUserInDB("Q").then( data => {
-      this.names.push(data.nom);
-      this.days.push(data.jour);
-      this.hours.push(data.heure );
-      this.minutes=[];
-      this.son=[];
+
+      if(data != null){
+        this.names.push(data.nom);
+        this.days.push(data.jour);
+        this.hours.push(data.heure );
+        this.minutes=[];
+        this.son=[];
+      }
+      
     })
      // TODO: crée une méthode pour récuperer toutes les alarmes liés à l'user et bind les valeurs des tableaux. 
   }

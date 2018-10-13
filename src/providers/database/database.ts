@@ -38,6 +38,7 @@ export class DatabaseProvider {
       .then(res => {
         console.log(res);
         this.toast.show('User registered', '5000', 'center');
+        this.insertNewClockInDataBase("New", 0,0,"New","New",username);
       }).catch(error => {
         console.log(error.message);
       });
@@ -61,7 +62,7 @@ export class DatabaseProvider {
       name: 'ionicdb.db',
       location: 'default'
     });
-    return this.db.executeSql('CREATE TABLE IF NOT EXISTS clock (nom TEXT PRIMARY KEY, heure INT, minute INT, jour TEXT, son TEXT, user TEXT)', [])
+    return this.db.executeSql('CREATE TABLE IF NOT EXISTS clock (nom TEXT, heure INT, minute INT, jour TEXT, son TEXT, user TEXT PRIMARY KEY)', [])
         .then(res => console.log(res))
         .catch(error => console.log(error));
   }
@@ -103,7 +104,7 @@ export class DatabaseProvider {
       .catch(error => {
         console.log(error.message);
       });
-      this.db.executeSql('DELETE FROM clock WHERE user="Q"').then().catch();
+      
     return dataClockInDB;
   }
 
@@ -130,7 +131,9 @@ export class DatabaseProvider {
     return dataClock
   }
 
-  updateClockForUserInDB(clockNom: string, heure: Number, minute: Number, jour: string, son: string, user: string) {
+  async updateClockForUserInDB(clockNom: string, heure: Number, minute: Number, jour: string, son: string, user: string) {
+    await this.dbReady;
+    
     this.sqlite.create({
       name: 'ionicdb.db',
       location: 'default'

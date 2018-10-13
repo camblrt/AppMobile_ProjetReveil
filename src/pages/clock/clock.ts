@@ -1,12 +1,13 @@
-import { LoginPage } from './../login/login';
+
 import { Toast } from '@ionic-native/toast';
 import { Component } from '@angular/core';
 import { NavController, NavParams, Platform, AlertController } from 'ionic-angular';
 import { LocalNotifications } from '@ionic-native/local-notifications';
 import { NotificationOpenPage } from './../notification-open/notification-open'
 import * as moment from 'moment';
-import { pluginWarn } from '@ionic-native/core';
-import { ThrowStmt } from '@angular/compiler';
+import { Storage } from '@ionic/storage';
+import { DatabaseProvider } from './../../providers/database/database';
+
 
 /**
  * Generated class for the ClockPage page.
@@ -28,8 +29,11 @@ export class ClockPage {
   days: any[];
   chosenHours: number;
   chosenMinutes: number;
+  currentUser: string;
 
-  constructor(private toast: Toast, public localNotifications: LocalNotifications, public navCtrl: NavController, public navParams: NavParams,  public platform: Platform,  public alertCtrl: AlertController) {
+  constructor(private toast: Toast, public localNotifications: LocalNotifications, 
+    public navCtrl: NavController, public navParams: NavParams,  public platform: Platform,  
+    public alertCtrl: AlertController,  private storage: Storage, public dataBase: DatabaseProvider) {
 
     this.nameAlarm = "";
 
@@ -37,6 +41,11 @@ export class ClockPage {
 
     this.chosenHours = new Date().getHours();
     this.chosenMinutes = new Date().getMinutes();
+
+    this.storage.get('current_username').then(data => {
+      console.log('localstorage gave me ' + data);
+      this.currentUser = data
+    });
 
     this.days = [
         {title: 'Monday', dayCode: 1, checked: false},
@@ -98,6 +107,7 @@ export class ClockPage {
         };
         this.notifications.push(notification);
       }
+      
     } 
 
     this.toast.show(`Scheduling notification`, '2000', 'center').subscribe(toast => {
@@ -107,8 +117,11 @@ export class ClockPage {
     // Cancel any existing notifications
     this.localNotifications.cancelAll().then(() => {
 
+      this.dataBase.updateClockForUserInDB(this.nameAlarm, this.chosenHours, this.chosenMinutes, "test jour","test son",this.currentUser);
+      
       // Schedule the new notifications
       this.localNotifications.schedule(this.notifications);
+      
       this.notifications = [];
 
       this.toast.show(`Notification scheduled`, '5000', 'center').subscribe(toast => {

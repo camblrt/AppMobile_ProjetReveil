@@ -32,7 +32,7 @@ export class HomePage {
                }
 
   displayClockOfCurrentUser(){
-    this.navCtrl.push(ClockPage);
+    this.navCtrl.push(ClockListPage);
   }
 
   userList(){
