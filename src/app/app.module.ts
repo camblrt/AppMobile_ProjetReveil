@@ -8,6 +8,8 @@ import { Toast } from '@ionic-native/toast';
 import {LocalNotifications} from "@ionic-native/local-notifications"
 import { HttpClientModule } from "@angular/common/http"
 import { Geolocation } from '@ionic-native/geolocation';
+import { IonicStorageModule } from '@ionic/storage';
+
 
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
@@ -17,6 +19,8 @@ import { ClockPage } from '../pages/clock/clock';
 import { DatabaseProvider } from '../providers/database/database';
 import { NotificationOpenPage } from '../pages/notification-open/notification-open'
 import { ClockListPage } from '../pages/clock-list/clock-list';
+import { ListUsersPage } from '../pages/list-users/list-users';
+
 
 
 @NgModule({
@@ -27,11 +31,13 @@ import { ClockListPage } from '../pages/clock-list/clock-list';
     RegisterPage,
     ClockPage,
     NotificationOpenPage,
-    ClockListPage
+    ClockListPage,
+    ListUsersPage
   ],
   imports: [
     BrowserModule,
     IonicModule.forRoot(MyApp),
+    IonicStorageModule.forRoot(),
     HttpClientModule
   ],
   bootstrap: [IonicApp],
@@ -42,7 +48,8 @@ import { ClockListPage } from '../pages/clock-list/clock-list';
     ClockPage,
     RegisterPage,
     NotificationOpenPage,
-    ClockListPage
+    ClockListPage,
+    ListUsersPage
   ],
   providers: [
     StatusBar,

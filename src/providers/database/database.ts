@@ -11,12 +11,14 @@ import { Toast } from '@ionic-native/toast';
 @Injectable()
 export class DatabaseProvider {
   db: SQLiteObject;
-  dbReady: Promise<any>; //pour attendre le create DB
+  dbReady: Promise<any>;
 
   constructor(private sqlite: SQLite,
               private toast: Toast) {
     this.dbReady = this.createDBUser();
     console.log('Hello DatabaseUserProvider Provider');
+
+    this.selectUserFromDataBase();
   }
 
   async createDBUser(){
@@ -44,23 +46,8 @@ export class DatabaseProvider {
   async selectUserFromDataBase(){
     await this.dbReady;
 
-    var dataUserInDB = {login: "", password: ""};
-    var lengthDB;
-    this.db.executeSql('select * from user', [])
-      .then(data => {
-        console.log("Data: " + data);
-        lengthDB = data.rows.length;
-        console.log("Length: " + lengthDB);
-        for(var i=0; i<lengthDB; i++){
-          dataUserInDB.login = data.rows.item(i).login;
-          dataUserInDB.password = data.rows.item(i).password;
-          console.log("User " + i + " : " + dataUserInDB.login + " and password is: " + dataUserInDB.password);
-        }
-      })
-      .catch(error => {
-        console.log(error.message);
-      });
-    return dataUserInDB;
+    
+    return this.db.executeSql('select * from user', []);
   }
 
   async checkUserExistsInDB(username: string){

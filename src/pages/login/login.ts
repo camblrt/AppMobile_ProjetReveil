@@ -18,16 +18,12 @@ export class LoginPage {
   usernameFromDB: string;
   passwordFromDB: string;
 
-
   constructor(public navCtrl: NavController, 
               public alertCtrl: AlertController,
               private sqlite: SQLite,
-              public databaseUser: DatabaseProvider) { 
-
-              }
+              public databaseUser: DatabaseProvider) { }
 
   async connexion() {
-
     let alert = this.alertCtrl.create({
       title: 'Connexion refusée',
       subTitle: 'Le mot et de passe et/ou le login ne sont pas valides',
