@@ -11,14 +11,18 @@
     <ion-row>
         <ion-col>
             <ion-list inset>
-            <ion-item>
-                <ion-input placeholder="Email" name="username" id="loginField"
-                             required type="text" [(ngModel)]="login" #email></ion-input>
-            </ion-item>
-            <ion-item>
-                <ion-input placeholder="Mot de passe" name="password" id="passwordField"
-                            type="password" required [(ngModel)]="password"></ion-input>
-            </ion-item>
+                <ion-item>
+                    <ion-input placeholder="Email" name="username" id="loginField"
+                                required type="text" [(ngModel)]="login" #email></ion-input>
+                </ion-item>
+                <ion-item>
+                    <ion-input placeholder="Mot de passe" name="password" id="passwordField"
+                                type="password" required [(ngModel)]="password"></ion-input>
+                </ion-item>
+                <ion-item>
+                    <ion-input placeholder="Verifiez votre mot de passe" name="passwordVerif" id="passwordVerif"
+                                type="password" required [(ngModel)]="passwordVerif" ></ion-input>
+                </ion-item>
             </ion-list>
         </ion-col>
     </ion-row>

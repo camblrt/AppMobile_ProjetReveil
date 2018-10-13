@@ -1,11 +1,12 @@
 import { ClockListPage } from './../clock-list/clock-list';
 import { ClockPage } from './../clock/clock';
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { NavController } from 'ionic-angular';
-import {LoginPage} from '../login/login'
-import {RegisterPage} from '../register/register'
-import { SQLite } from '@ionic-native/sqlite';
+import { Storage } from '@ionic/storage';
 import { DatabaseProvider } from '../../providers/database/database';
+import { ListUsersPage } from '../list-users/list-users';
+import { RegisterPage } from '../register/register';
+
 
 @Component({
   selector: 'page-home',
@@ -13,15 +14,36 @@ import { DatabaseProvider } from '../../providers/database/database';
 })
 
 export class HomePage {
-  constructor(public navCtrl: NavController,
-              private sqlite: SQLite,
-              public databaseUser: DatabaseProvider) {}
+  current_user:string;
 
-  connexion(){
+  constructor(public navCtrl: NavController,
+              public databaseUser: DatabaseProvider,
+              private storage: Storage) {
+
+                this.storage.get('current_username')
+                  .then((val) => {
+                    console.log('Your username is', val);
+                    this.current_user = val;
+                    if(this.current_user == null){
+                      this.navCtrl.push(RegisterPage);
+                    }
+                  });
+
+               }
+
+  displayClockOfCurrentUser(){
     this.navCtrl.push(ClockPage);
   }
 
-  register(){
-    this.navCtrl.push(RegisterPage);
+  userList(){
+    this.navCtrl.push(ListUsersPage);
+  }
+
+  ionViewWillEnter() {
+    return this.storage.get('current_username')
+    .then((val) => {
+      console.log('Your username is', val);
+      this.current_user = val;
+    });
   }
 }
