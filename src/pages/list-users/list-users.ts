@@ -4,6 +4,7 @@ import { DatabaseProvider } from '../../providers/database/database';
 import { RegisterPage } from '../register/register';
 import { ClockPage } from '../clock/clock';
 import { Storage } from '@ionic/storage';
+import { HomePage } from '../home/home';
 
 
 
@@ -21,6 +22,7 @@ import { Storage } from '@ionic/storage';
 })
 export class ListUsersPage {
   dataUsernameInDB = [];
+  userNumber: Number;
   
   constructor(public navCtrl: NavController, 
               public navParams: NavParams,
@@ -32,6 +34,7 @@ export class ListUsersPage {
                   lengthDB = data.rows.length;
                   for(var i=0; i<lengthDB; i++){
                     this.dataUsernameInDB[i]= data.rows.item(i).login;
+                    this.userNumber = i;
                     console.log("User " + i + " : " + this.dataUsernameInDB[i]);
                   }
                 })
@@ -45,7 +48,7 @@ export class ListUsersPage {
 
   itemSelected(user: string) {
     this.storage.set('current_username', user);
-    this.navCtrl.push(ClockPage);
+    this.navCtrl.push(HomePage);
   }
 
   register(){

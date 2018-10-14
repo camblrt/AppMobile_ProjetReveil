@@ -11,11 +11,20 @@
 </ion-header>
 
 <ion-content>
-  <ion-list inset>
-    <button ion-item *ngFor="let user of dataUsernameInDB" (click)="itemSelected(user)">
+
+  <h3>Vous êtes: </h3>
+
+  <ion-item *ngFor="let user of dataUsernameInDB; let i = index" [attr.data-index]="i">
+    <ion-avatar item-start>
+      <img src="../../assets/imgs/{{i}}.jpg">
+    </ion-avatar>
+    <h2 (click)="itemSelected(user)">
       {{ user }}
-    </button> 
+    </h2> 
+  </ion-item>
+  <ion-list inset>
+    
   </ion-list>
 
-  <button ion-button round color="orange" full (click)='register();'>Vous n'avez pas de compte?</button>
+  <button ion-button round color="orange" class="button-app" full (click)='register();'>Vous n'avez pas de compte?</button>
 </ion-content>

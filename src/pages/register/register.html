@@ -6,35 +6,27 @@
   </ion-navbar>
 </ion-header>
 <ion-content padding>
-<h3>Enregistrez-vous:</h3>
-<form #loginForm="ngForm" (ngSubmit)="register()" autocomplete="off">
-    <ion-row>
-        <ion-col>
-            <ion-list inset>
-                <ion-item>
-                    <ion-input placeholder="Nom d'utilisateur" name="username" id="loginField"
-                                required type="text" [(ngModel)]="login"></ion-input>
-                </ion-item>
-                <ion-item>
-                    <ion-input placeholder="Mot de passe" name="password" id="passwordField"
-                                type="password" required [(ngModel)]="password"></ion-input>
-                </ion-item>
-                <ion-item>
-                    <ion-input placeholder="Verifiez votre mot de passe" name="passwordVerif" id="passwordVerif"
-                                type="password" required [(ngModel)]="passwordVerif" ></ion-input>
-                </ion-item>
-            </ion-list>
-        </ion-col>
-    </ion-row>
-    <ion-row>
-        <ion-col>
-            <div *ngIf="error" class="alert alert-danger">{{error}}</div>
-            <button ion-button class="submit-btn" full type="submit"
-                    [disabled]="!loginForm.form.valid" >Enregistrez-vous
-            </button>
-        </ion-col>
-    </ion-row>
-</form>
+    <h3>Enregistrez-vous:</h3>
 
-    <button ion-button class="db-btn" (click)="getFromDB()">Check DB</button>
+    <form [formGroup]="registerUser" (ngSubmit)="register()">
+        <ion-item>
+        <ion-label>Nom d'utilisateur</ion-label>
+        <ion-input name="username" type="text" [(ngModel)]="login" formControlName="login"></ion-input>
+        </ion-item>
+        <ion-item>
+        <ion-label>Mot de passe</ion-label>
+        <ion-input name="password" type="password" [(ngModel)]="password" formControlName="password"></ion-input>
+        </ion-item>
+        <ion-item>
+            <ion-label>Confirmer le mot de passe</ion-label>
+            <ion-input name="confirmPassword" type="password" [(ngModel)]="confirmPassword" formControlName="confirmPassword"></ion-input>
+        </ion-item>
+        <ion-item no-lines *ngIf="registerUser.get('confirmPassword').hasError('equalTo')">
+            <div class="error" *ngIf="registerUser.get('confirmPassword').hasError('equalTo')">
+                Mot de passe différents
+            </div>
+        </ion-item>
+        <button ion-button round full color="orange" class="button-app" type="submit" [disabled]="!registerUser.valid">Submit</button>
+    </form>
+    <!-- <button ion-button class="db-btn" (click)="getFromDB()">Check DB</button> -->
 </ion-content>
