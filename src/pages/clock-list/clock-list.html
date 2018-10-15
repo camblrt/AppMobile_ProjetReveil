@@ -1,12 +1,12 @@
 <ion-header>
-    <ion-navbar>
-      <ion-title>
-        Liste des Alarmes
-      </ion-title>
-    </ion-navbar>
-  </ion-header>
+  <ion-navbar>
+    <ion-title>
+      Votre alarme
+    </ion-title>
+  </ion-navbar>
+</ion-header>
    
-  <ion-content>
+  <!-- <ion-content>
       <button ion-item (click)="modifyClock()">
         {{name}} {{hours}}h{{minutes}} {{days}}
       </button> 
@@ -14,4 +14,25 @@
    
   <ion-footer>
       <button ion-button class="db-btn" (click)="getFromDB()">Check DB</button>
-  </ion-footer>
+  </ion-footer> -->
+  
+<ion-content class="cards-bg">
+  
+  <ion-card class="adv-map">
+    <div style="position: relative">
+      <ion-fab right top>
+        <button ion-fab color="orange" class="fab-map" (click)="modifyClock()">
+          <ion-icon name='create'></ion-icon>
+        </button>
+      </ion-fab>
+    </div>
+    <ion-item>
+      <ion-icon color="subtle" large item-start name='clock'></ion-icon>
+      <h2>{{name}}</h2>
+      <span ion-text color="orange" class="item-bold">{{hours}}h{{minutes}}</span>
+    </ion-item>
+    <ion-item actions>
+      <p ion-text item-start>{{days}}</p>
+    </ion-item>
+  </ion-card>
+</ion-content>

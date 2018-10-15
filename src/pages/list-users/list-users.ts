@@ -48,7 +48,7 @@ export class ListUsersPage {
 
   itemSelected(user: string) {
     this.storage.set('current_username', user);
-    this.navCtrl.push(HomePage);
+    this.navCtrl.setRoot(HomePage);
   }
 
   register(){

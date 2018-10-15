@@ -51,7 +51,8 @@ export class RegisterPage {
     if(this.password == this.confirmPassword){
       this.databaseUser.insertNewUserInDataBase(this.login, this.password);
       this.storage.set('current_username', this.login);
-      this.navCtrl.push(HomePage);
+      // this.navCtrl.push(HomePage);
+      this.navCtrl.setRoot(HomePage);
     }
     else{
       this.toast.show('Les deux mots de passe doivent être identiques', '5000', 'center').subscribe(
