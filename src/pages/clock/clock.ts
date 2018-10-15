@@ -7,6 +7,7 @@ import { LocalNotifications } from '@ionic-native/local-notifications';
 import * as moment from 'moment';
 import { Storage } from '@ionic/storage';
 import { DatabaseProvider } from './../../providers/database/database';
+import { urlToNavGroupStrings } from 'ionic-angular/umd/navigation/url-serializer';
 
 
 /**
@@ -24,7 +25,7 @@ import { DatabaseProvider } from './../../providers/database/database';
 export class ClockPage {
 
   nameAlarm: string;
-  notifications: any[];
+  notifications: any[] = [];
   days: any[];
   dayDB: string;
   chosenHours: number;
@@ -55,6 +56,9 @@ export class ClockPage {
             this.dayDB = data.rows.item(i).jour;
             this.son = data.rows.item(i).son;
             }
+
+            var today = new Date();
+            this.notifyTime = moment(new Date(today.getFullYear(), today.getMonth(), today.getDate(), this.chosenHours, this.chosenMinutes, 0)).format();
             this.dbTOpagesDays(this.dayDB)
           })
         .catch(error => {
@@ -76,7 +80,6 @@ export class ClockPage {
   }
 
   dbTOpagesDays(dayDB){
-    console.log(dayDB)
     if(dayDB.includes("Lundi")){
       this.days[0].checked = true;
     }
@@ -97,12 +100,12 @@ export class ClockPage {
   timeChange(time){
     this.chosenHours = time.hour;
     this.chosenMinutes = time.minute;
-    console.log("Heure : "+ this.chosenHours + " Minutes : " + this.chosenMinutes)
   }
 
   addNotifications(){
     let currentDate = new Date();
     let currentDay = currentDate.getDay(); // Sunday = 0, Monday = 1, etc.
+    this.dayDB = "";
     for(let day of this.days){
       if(day.checked){
         let firstNotificationTime = new Date();
@@ -118,46 +121,44 @@ export class ClockPage {
         firstNotificationTime.setSeconds(0);
 
         //to test easyli
-        firstNotificationTime = new Date(new Date().getTime() + 10000);
+        firstNotificationTime = new Date(new Date().getTime() + 8000);
 
         let notification = {
-            title: "Brut",
+            title: this.nameAlarm,
             text: 'Its time to get Up:',
             trigger : {firstAt: firstNotificationTime, 
               every: 'minute',
-              count: 1000}
+              //Besoin de count 1000 sinon notifications sonne en boucle
+              count: 1000},
+            sound: URL('/../../assets/imgs/chicken.mp3');
         };
-        console.log("Push notification : " + notification)
-        //this.notifications.push(notification);
+        this.notifications.push(notification);
       }
     } 
 
 
-    this.toast.show(`Scheduling notification`, '2000', 'center').subscribe(toast => {
-      console.log(`Scheduling notification`);
-    });
+    this.toast.show(`Scheduling notification`, '2000', 'center');
 
     // Cancel any existing notifications
     this.localNotifications.cancelAll().then(() => {
       this.storage.get('current_username').then((val) => {
         this.dataBase.updateClockForUserInDB(this.nameAlarm, this.chosenHours, this.chosenMinutes, this.dayDB,"test son",val)
-        .then(resUpdateDB => {
-          console.log("Update ok : " + resUpdateDB);
+        .then(() => {
           this.toast.show('Data updated', '5000', 'center');
+
           // Schedule the new notifications
-          //this.localNotifications.schedule(this.notifications);
+          this.localNotifications.schedule(this.notifications);
           this.notifications = [];
 
-          this.toast.show(`Notification scheduled`, '5000', 'center').subscribe(toast => {console.log("Notification scheduled");});
+          this.toast.show(`Notification scheduled`, '5000', 'center').subscribe(() => console.log("Notif scheduled"));
 
           //What to do when click on notification
           this.localNotifications.on('click').subscribe(() => {this.navCtrl.push(ClockListPage);});
 
-          this.navCtrl.pop();
+          this.navCtrl.push(ClockListPage);
         })
         .catch(errorUpdateDB => {
           console.log(errorUpdateDB);
-          this.toast.show(errorUpdateDB, '5000', 'center').subscribe(toast => {console.log("Error update DB");});
         });
       });
     });
