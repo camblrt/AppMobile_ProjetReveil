@@ -130,8 +130,7 @@ export class ClockPage {
               every: 'minute',
               //Besoin de count 1000 sinon notifications sonne en boucle
               count: 1000},
-            sound: URL('/../../assets/imgs/chicken.mp3');
-        };
+            sound: '/../../assets/imgs/chicken.mp3'};
         this.notifications.push(notification);
       }
     } 
