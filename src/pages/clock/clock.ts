@@ -1,3 +1,4 @@
+import { NotificationOpenPage } from './../notification-open/notification-open';
 import { ClockListPage } from './../clock-list/clock-list';
 
 import { Toast } from '@ionic-native/toast';
@@ -95,6 +96,12 @@ export class ClockPage {
     if(dayDB.includes("Vendredi")){
       this.days[4].checked = true;
     }
+    if(dayDB.includes("Samedi")){
+      this.days[5].checked = true;
+    }
+    if(dayDB.includes("Dimanche")){
+      this.days[6].checked = true;
+    }
   }
 
   timeChange(time){
@@ -121,16 +128,19 @@ export class ClockPage {
         firstNotificationTime.setSeconds(0);
 
         //to test easyli
-        firstNotificationTime = new Date(new Date().getTime() + 8000);
+        firstNotificationTime = new Date(new Date().getTime());
 
         let notification = {
+            id: 1,
             title: this.nameAlarm,
             text: 'Its time to get Up:',
             trigger : {firstAt: firstNotificationTime, 
               every: 'minute',
               //Besoin de count 1000 sinon notifications sonne en boucle
               count: 1000},
-            sound: '/../../assets/imgs/chicken.mp3'};
+              smallIcon: 'res//assets/imgs/logo.png',
+              icon: 'https://d1nhio0ox7pgb.cloudfront.net/_img/g_collection_png/standard/256x256/pumpkin_halloween.png',
+              sound: 'res//assets/imgs/chicken.mp3'};
         this.notifications.push(notification);
       }
     } 
@@ -152,7 +162,8 @@ export class ClockPage {
           this.toast.show(`Notification scheduled`, '5000', 'center').subscribe(() => console.log("Notif scheduled"));
 
           //What to do when click on notification
-          this.localNotifications.on('click').subscribe(() => {this.navCtrl.push(ClockListPage);});
+          //this.localNotifications.on('trigger').subscribe(() => {this.navCtrl.push(NotificationOpenPage);});
+          this.localNotifications.on('click').subscribe(() => {this.navCtrl.push(NotificationOpenPage);});
 
           this.navCtrl.push(ClockListPage);
         })
@@ -162,14 +173,6 @@ export class ClockPage {
       });
     });
     return
-  }
-
-  setSound() {
-    if (this.platform.is('android')) {
-      return 'file://assets/sounds/chicken.mp3'
-    } else {
-      return 'file://assets/sounds/bell.mp3'
-    }
   }
  
   cancelAll(){
