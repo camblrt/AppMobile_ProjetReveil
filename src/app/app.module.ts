@@ -9,7 +9,7 @@ import {LocalNotifications} from "@ionic-native/local-notifications"
 import { HttpClientModule } from "@angular/common/http"
 import { Geolocation } from '@ionic-native/geolocation';
 import { IonicStorageModule } from '@ionic/storage';
-
+import { Vibration } from '@ionic-native/vibration';
 
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
@@ -59,6 +59,7 @@ import { ListUsersPage } from '../pages/list-users/list-users';
     DatabaseProvider,
     SQLite,
     Toast,
+    Vibration,
     Geolocation
   ]
 })

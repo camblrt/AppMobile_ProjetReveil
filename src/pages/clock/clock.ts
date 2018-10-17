@@ -8,6 +8,8 @@ import { LocalNotifications } from '@ionic-native/local-notifications';
 import * as moment from 'moment';
 import { Storage } from '@ionic/storage';
 import { DatabaseProvider } from './../../providers/database/database';
+import { Vibration } from '@ionic-native/vibration';
+
 import { urlToNavGroupStrings } from 'ionic-angular/umd/navigation/url-serializer';
 
 
@@ -34,9 +36,10 @@ export class ClockPage {
   notifyTime;
   son: string;
 
-  constructor(private toast: Toast, public localNotifications: LocalNotifications, 
+  constructor(private toast: Toast, public localNotifications: LocalNotifications, public vibration: Vibration,
     public navCtrl: NavController, public navParams: NavParams,  public platform: Platform,  
-    public alertCtrl: AlertController,  private storage: Storage, public dataBase: DatabaseProvider) {
+    public alertCtrl: AlertController,  private storage: Storage, public dataBase: DatabaseProvider
+    ) {
 
       this.days = [
         {title: 'Lundi', dayCode: 1, checked: false},
@@ -137,10 +140,10 @@ export class ClockPage {
             trigger : {firstAt: firstNotificationTime, 
               every: 'minute',
               //Besoin de count 1000 sinon notifications sonne en boucle
-              count: 1000},
+              count: 3600},
               smallIcon: 'res//assets/imgs/logo.png',
               icon: 'https://d1nhio0ox7pgb.cloudfront.net/_img/g_collection_png/standard/256x256/pumpkin_halloween.png',
-              sound: 'res//assets/imgs/chicken.mp3'};
+              sound: 'file//assets/imgs/chicken.mp3'};
         this.notifications.push(notification);
       }
     } 
@@ -162,8 +165,8 @@ export class ClockPage {
           this.toast.show(`Notification scheduled`, '5000', 'center').subscribe(() => console.log("Notif scheduled"));
 
           //What to do when click on notification
-          //this.localNotifications.on('trigger').subscribe(() => {this.navCtrl.push(NotificationOpenPage);});
           this.localNotifications.on('click').subscribe(() => {this.navCtrl.push(NotificationOpenPage);});
+          //this.localNotifications.on('trigger').subscribe(() => {this.vibration.vibrate(5000)});
 
           this.navCtrl.push(ClockListPage);
         })
