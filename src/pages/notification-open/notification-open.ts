@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, AlertController, IonicApp } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
 import { HttpClient  } from '@angular/common/http'; 
 import 'rxjs/add/operator/map';
 import { Geolocation } from '@ionic-native/geolocation';
@@ -47,6 +47,7 @@ export class NotificationOpenPage {
             console.log("this.temperature: " + data.main.temp + " - this.meteo: " + this.meteo);
             this.name = data.name;
             this.ShowResult = true;
+            console.log(this.temperature);
           },
             (err) => {
                 console.log(err);

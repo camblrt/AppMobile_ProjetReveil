@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { DatabaseProvider } from '../../providers/database/database';
 import { RegisterPage } from '../register/register';
-import { ClockPage } from '../clock/clock';
 import { Storage } from '@ionic/storage';
 import { HomePage } from '../home/home';
 
@@ -35,7 +34,6 @@ export class ListUsersPage {
                   for(var i=0; i<lengthDB; i++){
                     this.dataUsernameInDB[i]= data.rows.item(i).login;
                     this.userNumber = i;
-                    console.log("User " + i + " : " + this.dataUsernameInDB[i]);
                   }
                 })
                 .catch(error => {

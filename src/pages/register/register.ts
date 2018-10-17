@@ -3,7 +3,7 @@ import {  IonicPage, NavController , AlertController} from 'ionic-angular';
 import { DatabaseProvider } from '../../providers/database/database';
 import { Toast } from '@ionic-native/toast';
 import { Storage } from '@ionic/storage';
-import {FormControl, Validators, FormBuilder, FormGroup, ValidatorFn,AbstractControl } from '@angular/forms';
+import {FormControl, Validators, FormBuilder, FormGroup, ValidatorFn, AbstractControl } from '@angular/forms';
 import { HomePage } from '../home/home';
 
 @IonicPage()

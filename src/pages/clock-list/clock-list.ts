@@ -16,7 +16,7 @@ import { Storage } from '@ionic/storage';
   templateUrl: 'clock-list.html',
 })
 export class ClockListPage {
-  
+
   name: string;
   days: string;
   hours: number;
@@ -24,38 +24,47 @@ export class ClockListPage {
   son: string;
 
   constructor(public navCtrl: NavController,
-              public navParams: NavParams, 
-              public dataBaseProviser: DatabaseProvider,
-              private storage: Storage) {
+    public navParams: NavParams,
+    public dataBaseProviser: DatabaseProvider,
+    private storage: Storage) {
 
-    this.dataBaseProviser.createDBClock();
+    this.name = "Pas d'alarmes";
+    this.days = "Pas d'alarmes";
+    this.hours = 0;
+    this.minutes = 0;
 
-    this.name="Pas d'alarmes";
-    this.days="Pas d'alarmes";
-    this.hours=0;
-    this.minutes=0;
-    this.son="Pas d'alarmes";
-    
     this.storage.get('current_username').then((val) => {
-    this.dataBaseProviser.selectClockForUserInDB(val).then(data => {      
-      let lengthDB = data.rows.length;
-      for(var i=0; i<lengthDB; i++){
-        this.name = data.rows.item(i).nom;
-        this.hours = data.rows.item(i).heure;
-        this.minutes = data.rows.item(i).minute;
-        this.days = data.rows.item(i).jour;
-        this.son = data.rows.item(i).son;
+      this.dataBaseProviser.selectClockForUserInDB(val).then(data => {
+        let lengthDB = data.rows.length;
+        for (var i = 0; i < lengthDB; i++) {
+          this.name = data.rows.item(i).nom;
+          this.hours = data.rows.item(i).heure;
+          this.minutes = data.rows.item(i).minute;
+          this.days = data.rows.item(i).jour;
         }
       })
-    .catch(error => {
-        console.log(error.message);
-      });
-  });
-}
-  getFromDB(){
+        .catch(error => {
+          console.log(error.message);
+        });
+    });
+  }
+  getFromDB() {
     this.dataBaseProviser.selectClockFromDataBase();
   }
-  modifyClock(){
+  modifyClock() {
     this.navCtrl.push(ClockPage)
+  }
+
+  ionViewWillEnter() {
+    return this.storage.get('clock')
+    .then((val) => {
+      if(val == null){
+        this.navCtrl.push(ClockPage);
+      }
+      this.name = val[0];
+      this.hours = val[1];
+      this.minutes = val[2];
+      this.days = val[3];
+    });
   }
 }

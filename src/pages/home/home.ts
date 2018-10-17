@@ -1,5 +1,4 @@
 import { ClockListPage } from './../clock-list/clock-list';
-import { ClockPage } from './../clock/clock';
 import { Component, Input } from '@angular/core';
 import { NavController } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
@@ -22,7 +21,6 @@ export class HomePage {
 
                 this.storage.get('current_username')
                   .then((val) => {
-                    console.log('Your username is', val);
                     this.current_user = val;
                     if(this.current_user == null){
                       this.navCtrl.push(RegisterPage);
@@ -42,7 +40,6 @@ export class HomePage {
   ionViewWillEnter() {
     return this.storage.get('current_username')
     .then((val) => {
-      console.log('Your username is', val);
       this.current_user = val;
     });
   }

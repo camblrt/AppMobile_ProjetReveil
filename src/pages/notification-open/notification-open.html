@@ -5,25 +5,17 @@
   Ionic pages and navigation.
 -->
 <ion-header>
-
-    <ion-navbar>
-      <ion-title>meteo</ion-title>
-    </ion-navbar>
-  
-  </ion-header>
-  
-  
-  <ion-content padding>
-    <ion-item [hidden]=!ShowResult>
-      <ion-card text-center>
-        <h3>Nom de la Ville: {{name}}</h3>
+  <ion-navbar>
+    <ion-title>La météo pres de chez vous:</ion-title>
+  </ion-navbar>
+</ion-header>
+<ion-content padding>
+    <ion-card color="light">
+      <ion-card-content>
+        <h1>Á {{name}}</h1>
+        <h2>Le temps est {{meteo}} et il fait {{temperature}}°C aujourd'hui.</h2>
         <img [src]="icone_meteo" />
-        <h3>Meteo: {{meteo}}</h3>
-        <h4>Temperature: {{temperature}}°C</h4>
-      </ion-card>
-    </ion-item>
-  
-  
-  
-  </ion-content>
-  
+        <h3>Bonne journée!</h3>
+      </ion-card-content>
+    </ion-card>
+</ion-content>
