@@ -8,6 +8,8 @@ import { LocalNotifications } from '@ionic-native/local-notifications';
 import * as moment from 'moment';
 import { Storage } from '@ionic/storage';
 import { DatabaseProvider } from './../../providers/database/database';
+import { Vibration } from '@ionic-native/vibration';
+
 import { urlToNavGroupStrings } from 'ionic-angular/umd/navigation/url-serializer';
 
 
@@ -141,7 +143,7 @@ export class ClockPage {
             firstAt: firstNotificationTime,
             every: 'minute',
             //Besoin de count 1000 sinon notifications sonne en boucle
-            count: 1000
+            count: 3600
           },
           smallIcon: 'res//assets/imgs/logo.png',
           icon: 'https://d1nhio0ox7pgb.cloudfront.net/_img/g_collection_png/standard/256x256/pumpkin_halloween.png',
