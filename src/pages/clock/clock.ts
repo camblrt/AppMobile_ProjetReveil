@@ -133,9 +133,6 @@ export class ClockPage {
         firstNotificationTime.setHours(this.chosenHours + (24 * (dayDifference)));
         firstNotificationTime.setMinutes(this.chosenMinutes);
         firstNotificationTime.setSeconds(0);
-
-        this.file.src = './assets/sounds/chicken.mp3';
-        this.file.load();
         
         //to test easily
         firstNotificationTime = new Date(new Date().getTime());
@@ -152,7 +149,7 @@ export class ClockPage {
           },
           smallIcon: 'res//assets/imgs/logo.png',
           icon: 'https://d1nhio0ox7pgb.cloudfront.net/_img/g_collection_png/standard/256x256/pumpkin_halloween.png',
-          sound: this.file 
+
         };
         this.notifications.push(notification);
       }
@@ -169,6 +166,11 @@ export class ClockPage {
 
       this.localNotifications.on('click').subscribe(() => { 
         this.navCtrl.push(NotificationOpenPage);
+      });
+      this.localNotifications.on('trigger').subscribe(() => { 
+        this.file.src = 'http://www.slspencer.com/Sounds/Halloween/TAUNT019.wav';
+        this.file.load();
+        this.file.play();
       });
       this.notifications = [];
       
