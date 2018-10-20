@@ -1,5 +1,4 @@
 import { NotificationOpenPage } from './../notification-open/notification-open';
-import { ClockListPage } from './../clock-list/clock-list';
 
 import { Toast } from '@ionic-native/toast';
 import { Component } from '@angular/core';
@@ -8,7 +7,7 @@ import { LocalNotifications } from '@ionic-native/local-notifications';
 import * as moment from 'moment';
 import { Storage } from '@ionic/storage';
 import { DatabaseProvider } from './../../providers/database/database';
-import { Vibration } from '@ionic-native/vibration';
+import { Media, MediaObject } from '@ionic-native/media';
 
 import { urlToNavGroupStrings } from 'ionic-angular/umd/navigation/url-serializer';
 
@@ -36,11 +35,14 @@ export class ClockPage {
   chosenMinutes: number;
   notifyTime;
   son: string;
+  public file = new Audio();
 
   constructor(private toast: Toast, public localNotifications: LocalNotifications,
+    private media: Media,
     public navCtrl: NavController, public navParams: NavParams, public platform: Platform,
     public alertCtrl: AlertController, private storage: Storage, public dataBase: DatabaseProvider) {
-
+    
+    
     this.days = [
       { title: 'Lundi', dayCode: 1, checked: false },
       { title: 'Mardi', dayCode: 2, checked: false },
@@ -132,9 +134,12 @@ export class ClockPage {
         firstNotificationTime.setMinutes(this.chosenMinutes);
         firstNotificationTime.setSeconds(0);
 
+        this.file.src = './assets/sounds/chicken.mp3';
+        this.file.load();
+        
         //to test easily
         firstNotificationTime = new Date(new Date().getTime());
-
+        
         let notification = {
           id: 1,
           title: this.nameAlarm,
@@ -143,11 +148,11 @@ export class ClockPage {
             firstAt: firstNotificationTime,
             every: 'minute',
             //Besoin de count 1000 sinon notifications sonne en boucle
-            count: 3600
+            count: 1000
           },
           smallIcon: 'res//assets/imgs/logo.png',
           icon: 'https://d1nhio0ox7pgb.cloudfront.net/_img/g_collection_png/standard/256x256/pumpkin_halloween.png',
-          sound: 'res//assets/imgs/chicken.mp3'
+          sound: this.file 
         };
         this.notifications.push(notification);
       }
@@ -158,31 +163,28 @@ export class ClockPage {
 
     // Cancel any existing notifications
     this.localNotifications.cancelAll().then(() => {
-      this.storage.get('current_username').then((val) => {
-        this.dataBase.updateClockForUserInDB(this.nameAlarm, this.textAlarm, this.chosenHours, this.chosenMinutes, this.dayDB, "test son", val)
-          .then(() => {
-            // Schedule the new notifications
-            this.localNotifications.schedule(this.notifications);
-            this.notifications = [];
 
-            this.toast.show("Modification de la notification", '2000', 'center').subscribe(() => console.log("Modification de la notification"));
+      this.localNotifications.schedule(this.notifications);
+      this.toast.show("Modification de la notification", '5000', 'center').subscribe(() => console.log("Modification de la notification"));
 
-            //What to do when click on notification
-            // this.localNotifications.on('trigger').subscribe(() => {this.navCtrl.push(NotificationOpenPage);});
-            this.localNotifications.on('click').subscribe(() => { this.navCtrl.push(NotificationOpenPage); });
-            
-
-
-
-
-
-          })
-          .catch(errorUpdateDB => {
-            console.log(errorUpdateDB);
-          });
+      this.localNotifications.on('click').subscribe(() => { 
+        this.navCtrl.push(NotificationOpenPage);
       });
+      this.notifications = [];
+      
+
     });
-    return;
+    this.storage.get('current_username').then((val) => {
+      this.dataBase.updateClockForUserInDB(this.nameAlarm, this.textAlarm, this.chosenHours, this.chosenMinutes, this.dayDB, "test son", val)
+        .then(() => {
+          console.log("DB updated");
+        })
+        .catch(errorUpdateDB => {
+          console.log(errorUpdateDB);
+        });
+    });
+
+  return;
   }
 
   cancelAll() {
@@ -192,6 +194,10 @@ export class ClockPage {
       buttons: ['Ok']
     });
     alert.present();
+
+    this.file.src = 'http://www.slspencer.com/Sounds/Halloween/Cave.wav';
+    this.file.load();
+    this.file.play();
   }
 
 }

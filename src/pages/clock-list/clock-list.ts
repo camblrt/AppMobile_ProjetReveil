@@ -20,7 +20,7 @@ export class ClockListPage {
   name: string;
   days: string;
   hours: number;
-  minutes: number;
+  minutes: string;
   son: string;
 
   constructor(public navCtrl: NavController,
@@ -31,22 +31,7 @@ export class ClockListPage {
     this.name = "Pas d'alarmes";
     this.days = "Pas d'alarmes";
     this.hours = 0;
-    this.minutes = 0;
-
-    this.storage.get('current_username').then((val) => {
-      this.dataBaseProviser.selectClockForUserInDB(val).then(data => {
-        let lengthDB = data.rows.length;
-        for (var i = 0; i < lengthDB; i++) {
-          this.name = data.rows.item(i).nom;
-          this.hours = data.rows.item(i).heure;
-          this.minutes = data.rows.item(i).minute;
-          this.days = data.rows.item(i).jour;
-        }
-      })
-        .catch(error => {
-          console.log(error.message);
-        });
-    });
+    this.minutes = "00";
   }
   getFromDB() {
     this.dataBaseProviser.selectClockFromDataBase();
@@ -63,7 +48,13 @@ export class ClockListPage {
       }
       this.name = val[0];
       this.hours = val[1];
-      this.minutes = val[2];
+      if(val[2] < 10){
+        this.minutes = "0" + val[2];
+      }
+      else{
+        this.minutes = val[2];
+      }
+      
       this.days = val[3];
     });
   }

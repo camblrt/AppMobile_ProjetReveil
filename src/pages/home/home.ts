@@ -14,7 +14,7 @@ import { RegisterPage } from '../register/register';
 
 export class HomePage {
   current_user:string;
-
+  private file = new Audio();
   constructor(public navCtrl: NavController,
               public databaseUser: DatabaseProvider,
               private storage: Storage) {
@@ -27,6 +27,10 @@ export class HomePage {
                     }
                   });
 
+                  this.file.src = 'http://www.slspencer.com/Sounds/Halloween/MrChicken-Laugh.mp3';
+                  this.file.load();
+                  this.file.play();
+                  
                }
 
   displayClockOfCurrentUser(){
