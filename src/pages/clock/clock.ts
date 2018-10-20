@@ -41,8 +41,8 @@ export class ClockPage {
     private media: Media,
     public navCtrl: NavController, public navParams: NavParams, public platform: Platform,
     public alertCtrl: AlertController, private storage: Storage, public dataBase: DatabaseProvider) {
-    
-    
+
+
     this.days = [
       { title: 'Lundi', dayCode: 1, checked: false },
       { title: 'Mardi', dayCode: 2, checked: false },
@@ -133,10 +133,10 @@ export class ClockPage {
         firstNotificationTime.setHours(this.chosenHours + (24 * (dayDifference)));
         firstNotificationTime.setMinutes(this.chosenMinutes);
         firstNotificationTime.setSeconds(0);
-        
+
         //to test easily
         firstNotificationTime = new Date(new Date().getTime());
-        
+
         let notification = {
           id: 1,
           title: this.nameAlarm,
@@ -149,7 +149,6 @@ export class ClockPage {
           },
           smallIcon: 'res//assets/imgs/logo.png',
           icon: 'https://d1nhio0ox7pgb.cloudfront.net/_img/g_collection_png/standard/256x256/pumpkin_halloween.png',
-
         };
         this.notifications.push(notification);
       }
@@ -164,17 +163,15 @@ export class ClockPage {
       this.localNotifications.schedule(this.notifications);
       this.toast.show("Modification de la notification", '5000', 'center').subscribe(() => console.log("Modification de la notification"));
 
-      this.localNotifications.on('click').subscribe(() => { 
-        this.navCtrl.push(NotificationOpenPage);
-      });
-      this.localNotifications.on('trigger').subscribe(() => { 
+      this.localNotifications.on('trigger').subscribe(() => {
         this.file.src = 'http://www.slspencer.com/Sounds/Halloween/TAUNT019.wav';
         this.file.load();
         this.file.play();
+
+        this.navCtrl.push(NotificationOpenPage);
+
       });
       this.notifications = [];
-      
-
     });
     this.storage.get('current_username').then((val) => {
       this.dataBase.updateClockForUserInDB(this.nameAlarm, this.textAlarm, this.chosenHours, this.chosenMinutes, this.dayDB, "test son", val)
@@ -186,7 +183,7 @@ export class ClockPage {
         });
     });
 
-  return;
+    return;
   }
 
   cancelAll() {

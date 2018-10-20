@@ -10,12 +10,20 @@
   </ion-navbar>
 </ion-header>
 <ion-content padding>
-    <ion-card color="light">
-      <ion-card-content>
-        <h1>Á {{name}}</h1>
-        <h2>Le temps est {{meteo}} et il fait {{temperature}}°C aujourd'hui.</h2>
-        <img [src]="icone_meteo" />
-        <h3>Bonne journée!</h3>
-      </ion-card-content>
-    </ion-card>
+  <ion-card color="light">
+    <ion-card-content>
+      <h1>Á {{name}}</h1>
+      <h2>Le temps est {{meteo}} et il fait {{temperature}}°C aujourd'hui.</h2>
+      <img [src]="icone_meteo" />
+      <h3>Bonne journée!</h3>
+    </ion-card-content>
+  </ion-card>
+  <ion-card color="light">
+    <ion-card-content>
+      <h1>L'actualité du jour: </h1>
+      <div *ngFor="let actu of actualites; let i = index" [attr.data-index]="i" style="margin-top: 10%;">
+        <h2>• {{actu.title}}</h2>
+      </div>
+    </ion-card-content>
+  </ion-card>
 </ion-content>

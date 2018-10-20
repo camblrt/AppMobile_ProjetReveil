@@ -27,9 +27,9 @@ export class HomePage {
                     }
                   });
 
-                  this.file.src = 'http://www.slspencer.com/Sounds/Halloween/MrChicken-Laugh.mp3';
-                  this.file.load();
-                  this.file.play();
+                  // this.file.src = 'http://www.slspencer.com/Sounds/Halloween/MrChicken-Laugh.mp3';
+                  // this.file.load();
+                  // this.file.play();
                   
                }
 
