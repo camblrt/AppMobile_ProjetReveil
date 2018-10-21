@@ -18,10 +18,10 @@
     <ion-avatar item-start>
       <img src="../../assets/imgs/{{i}}.jpg">
     </ion-avatar>
-    <h2 (click)="itemSelected(user)">
+    <h2 (click)="userSelected(user)">
       {{ user }}
     </h2> 
   </ion-item>
 
-  <button ion-button round color="orange" class="button-app" full (click)='register();'>Vous n'avez pas de compte?</button>
+  <button ion-button round color="orange" class="button-app" full (click)='registerNewUser();'>Vous n'avez pas de compte?</button>
 </ion-content>

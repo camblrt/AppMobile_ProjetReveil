@@ -15,7 +15,6 @@ import { NativeGeocoder } from '@ionic-native/native-geocoder';
 
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
-import { LoginPage } from '../pages/login/login';
 import { RegisterPage } from '../pages/register/register';
 import { ClockPage } from '../pages/clock/clock';
 import { DatabaseProvider } from '../providers/database/database';
@@ -29,7 +28,6 @@ import { ListUsersPage } from '../pages/list-users/list-users';
   declarations: [
     MyApp,
     HomePage,
-    LoginPage,
     RegisterPage,
     ClockPage,
     NotificationOpenPage,
@@ -46,7 +44,6 @@ import { ListUsersPage } from '../pages/list-users/list-users';
   entryComponents: [
     MyApp,
     HomePage,
-    LoginPage,
     ClockPage,
     RegisterPage,
     NotificationOpenPage,

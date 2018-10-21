@@ -1,6 +1,10 @@
+//************************ */
+// PAGE NOT USED IN THE APP
+//************************ */
+
+
 import { Component } from '@angular/core';
 import { NavController, AlertController} from 'ionic-angular';
-import { SQLite } from '@ionic-native/sqlite';
 import {ClockPage} from '../clock/clock';
 import { DatabaseProvider } from '../../providers/database/database';
 
@@ -20,7 +24,6 @@ export class LoginPage {
 
   constructor(public navCtrl: NavController, 
               public alertCtrl: AlertController,
-              private sqlite: SQLite,
               public databaseUser: DatabaseProvider) { }
 
   async connexion() {
@@ -32,16 +35,12 @@ export class LoginPage {
     
     this.databaseUser.checkUserExistsInDB(this.login).then(data => {
       var lengthDB;
-      console.log("Data: " + data);
       lengthDB = data.rows.length;
-      console.log("Length: " + lengthDB);
       for(var i=0; i<lengthDB; i++){
         this.usernameFromDB = data.rows.item(i).login;
         this.passwordFromDB = data.rows.item(i).password;
         console.log("User " + i + " : " + this.usernameFromDB + " and password is: " + this.passwordFromDB);
-      } 
-      console.log("user from DB: " + this.usernameFromDB);
-      console.log("user from form: " + this.login);
+      }
       if (this.login == this.usernameFromDB && this.password == this.passwordFromDB) {
         console.log("User connected.");
         this.navCtrl.push(ClockPage);

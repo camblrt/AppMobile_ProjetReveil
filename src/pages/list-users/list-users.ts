@@ -22,39 +22,39 @@ import { HomePage } from '../home/home';
 export class ListUsersPage {
   dataUsernameInDB = [];
   userNumber: Number;
-  
-  constructor(public navCtrl: NavController, 
-              public navParams: NavParams,
-              public databaseUser: DatabaseProvider,
-              private storage: Storage) { 
 
-                var lengthDB;
-                this.databaseUser.selectUserFromDataBase().then(data => {
-                  lengthDB = data.rows.length;
-                  for(var i=0; i<lengthDB; i++){
-                    this.dataUsernameInDB[i]= data.rows.item(i).login;
-                    this.userNumber = i;
-                  }
-                })
-                .catch(error => {
-                  console.log(error.message);
-                });
+  constructor(public navCtrl: NavController,
+    public navParams: NavParams,
+    public databaseUser: DatabaseProvider,
+    private storage: Storage) {
 
-              }
-  
+    this.getAllUsersFromDataBase();
 
 
-  itemSelected(user: string) {
+  }
+
+  getAllUsersFromDataBase() {
+    var lengthDB;
+    this.databaseUser.selectUserFromDataBase().then(data => {
+      lengthDB = data.rows.length;
+      for (var i = 0; i < lengthDB; i++) {
+        this.dataUsernameInDB[i] = data.rows.item(i).login;
+        this.userNumber = i;
+      }
+    })
+      .catch(error => {
+        console.log("Error from getAllUsersFromDataBase() : " + error.message);
+      });
+  }
+
+
+  userSelected(user: string) {
     this.storage.set('current_username', user);
     this.navCtrl.setRoot(HomePage);
   }
 
-  register(){
+  registerNewUser() {
     this.navCtrl.push(RegisterPage);
-  }
-
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad ListUsersPage');
   }
 
 }

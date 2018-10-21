@@ -51,8 +51,8 @@ export class NotificationOpenPage {
 
       this.getCountryFromPosition();
     },
-      (err) => {
-        console.log(err);
+      (error) => {
+        console.log("Error from getWeatherFromPosition(): " + error.message);
         alert.present();
       }
     );
@@ -67,11 +67,10 @@ export class NotificationOpenPage {
 
     this.nativeGeocoder.reverseGeocode(this.latitude, this.longitude, options)
       .then((result: NativeGeocoderReverseResult[]) => {
-        console.log("COUNTRY: " + JSON.stringify(result[0].countryCode));
         this.country = result[0].countryCode;
         this.getActualitesFromCountry();
       })
-      .catch((error: any) => console.log(error));
+      .catch((error: any) => console.log("Error from getCountryFromPosition()" + error.message));
   }
 
   getActualitesFromCountry() {
@@ -80,10 +79,11 @@ export class NotificationOpenPage {
 
     this.http.get(url_actu).subscribe((actu: any) => {
       this.actualites = actu.articles;
-      for (var i = 0; i < actu.articles.length; i++) {
-        console.log("ACTU: " + actu.articles[i].title);
+    },
+      (error) => {
+        console.log("Error from getActualitesFromCountry(): " + error.message);
       }
-    })
+    )
   }
 
   ionViewDidLoad() {
@@ -100,9 +100,13 @@ export class NotificationOpenPage {
 
         this.getWeatherFromPosition();
 
-      }).catch((error) => {
-        console.log('Error getting location', error);
+      })
+        .catch((error) => {
+          console.log('Error from getCurrentPosition(): ', error.message);
+        });
+    })
+      .catch((error) => {
+        console.log('Error from platform.ready(): ', error.message);
       });
-    });
   }
 }

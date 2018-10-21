@@ -1,7 +1,7 @@
 import { DatabaseProvider } from './../../providers/database/database';
 import { ClockPage } from './../clock/clock';
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, Platform } from 'ionic-angular';
+import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
 /**
  * Generated class for the ClockListPage page.

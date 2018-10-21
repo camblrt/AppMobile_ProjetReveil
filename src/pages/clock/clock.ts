@@ -70,7 +70,7 @@ export class ClockPage {
         this.dbTOpagesDays(this.dayDB)
       })
         .catch(error => {
-          console.log(error.message);
+          console.log("Error from selectClockForUserInDB(): " + error.message);
         });
     });
   }
@@ -116,7 +116,7 @@ export class ClockPage {
     this.chosenMinutes = time.minute;
   }
 
-  addNotifications() {
+  getClockValueAndCreateNewNotification() {
     let currentDate = new Date();
     let currentDay = currentDate.getDay(); // Sunday = 0, Monday = 1, etc.
     this.dayDB = "";
@@ -154,14 +154,14 @@ export class ClockPage {
       }
 
     }
-    this.storage.set('clock', [this.nameAlarm, this.chosenHours, this.chosenMinutes, this.dayDB]);
-    this.navCtrl.pop();
+  }
 
+  scheduleLocalNotification() {
     // Cancel any existing notifications
     this.localNotifications.cancelAll().then(() => {
 
       this.localNotifications.schedule(this.notifications);
-      this.toast.show("Modification de la notification", '5000', 'center').subscribe(() => console.log("Modification de la notification"));
+      console.log("Modification de la notification");
 
       this.localNotifications.on('trigger').subscribe(() => {
         this.file.src = 'http://www.slspencer.com/Sounds/Halloween/TAUNT019.wav';
@@ -173,26 +173,42 @@ export class ClockPage {
       });
       this.notifications = [];
     });
+  }
+
+  updateClockTableInDataBase() {
     this.storage.get('current_username').then((val) => {
       this.dataBase.updateClockForUserInDB(this.nameAlarm, this.textAlarm, this.chosenHours, this.chosenMinutes, this.dayDB, "test son", val)
         .then(() => {
           console.log("DB updated");
         })
         .catch(errorUpdateDB => {
-          console.log(errorUpdateDB);
+          console.log("Error from updateClockForUserInDB(): " + errorUpdateDB.message);
         });
     });
+  }
+
+  createScheduleNotificationAndSaveClockValue() {
+
+    this.getClockValueAndCreateNewNotification();
+
+    this.storage.set('clock', [this.nameAlarm, this.chosenHours, this.chosenMinutes, this.dayDB]);
+    this.navCtrl.pop();
+
+    this.scheduleLocalNotification();
+
+    this.updateClockTableInDataBase();
 
     return;
   }
 
   cancelAll() {
     this.localNotifications.cancelAll();
-    let alert = this.alertCtrl.create({
-      title: 'Alarm cancelled',
-      buttons: ['Ok']
-    });
-    alert.present();
+
+    this.toast.show('Alarm cancelled', '5000', 'center').subscribe(
+      toast => {
+        console.log(toast);
+      }
+    );
 
     this.file.src = 'http://www.slspencer.com/Sounds/Halloween/Cave.wav';
     this.file.load();

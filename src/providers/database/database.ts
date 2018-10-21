@@ -16,8 +16,6 @@ export class DatabaseProvider {
   constructor(private sqlite: SQLite,
     private toast: Toast) {
     this.dbReady = this.createDatabase();
-    console.log('Hello DatabaseUserProvider Provider');
-
     this.selectUserFromDataBase();
   }
 
@@ -28,10 +26,10 @@ export class DatabaseProvider {
     });
     this.db.executeSql('CREATE TABLE IF NOT EXISTS user (login TEXT PRIMARY KEY, password TEXT)', [])
       .then(res => console.log(res))
-      .catch(error => console.log(error));
+      .catch(error => console.log("Error from executeSql(CREATE USER TABLE): " + error.message));
     this.db.executeSql('CREATE TABLE IF NOT EXISTS clock (nom TEXT, text TEXT, heure INT, minute INT, jour TEXT, son TEXT, user TEXT PRIMARY KEY)', [])
       .then(res => console.log(res))
-      .catch(error => console.log(error));
+      .catch(error => console.log("Error from executeSql(CREATE CLOCK TABLE): " + error));
     return;
   }
 
@@ -40,11 +38,10 @@ export class DatabaseProvider {
 
     return this.db.executeSql('INSERT INTO user VALUES(?,?)', [username, password])
       .then(res => {
-        console.log("New user" + res);
         this.toast.show('User registered', '5000', 'center');
         this.insertNewClockInDataBase("Nouvelle Alarme", "Il est l'heure!", 0, 0, "Lundi Jeudi", "Nouveau Son", username);
       }).catch(error => {
-        console.log(error.message);
+        console.log("Error from executeSql(INSERT INTO user): " + error.message);
       });
   }
 
@@ -65,10 +62,9 @@ export class DatabaseProvider {
 
     return this.db.executeSql('INSERT INTO clock (nom, text, heure, minute, jour, son, user) VALUES(?,?,?,?,?,?,?)', [nom, text, heure, minute, jour, son, user])
       .then(res => {
-        console.log("New clock" + res);
-        this.toast.show('Clock registered', '5000', 'center');
+        console.log("Clock registered" + res);
       }).catch(error => {
-        console.log(error.message);
+        console.log("Error from executeSql(INSERT INTO clock): " + error.message);
       });
   }
 
@@ -89,13 +85,10 @@ export class DatabaseProvider {
           dataClockInDB.jour = data.rows.item(i).jour;
           dataClockInDB.son = data.rows.item(i).son;
           dataClockInDB.user = data.rows.item(i).user;
-          console.log("Nom " + i + " : " + dataClockInDB.nom + ", heure is: " + dataClockInDB.heure
-            + ", jour is: " + dataClockInDB.jour + ", son is: " + dataClockInDB.son
-            + ", user is: " + dataClockInDB.user);
         }
       })
       .catch(error => {
-        console.log(error.message);
+        console.log("Error from executeSql(SELECT * FROM clock): " + error.message);
       });
     return
   }
