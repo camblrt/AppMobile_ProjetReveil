@@ -26,8 +26,13 @@ export class NotificationOpenPage {
   country: any;
 
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public platform: Platform,
-    public alertCtrl: AlertController, public http: HttpClient, private geolocation: Geolocation, private nativeGeocoder: NativeGeocoder) {
+  constructor(public navCtrl: NavController, 
+              public navParams: NavParams, 
+              public platform: Platform,
+              public alertCtrl: AlertController, 
+              public http: HttpClient, 
+              private geolocation: Geolocation, 
+              private nativeGeocoder: NativeGeocoder) {
   }
 
   getWeatherFromPosition() {
@@ -39,11 +44,11 @@ export class NotificationOpenPage {
 
     this.url = "http://api.openweathermap.org/data/2.5/weather?lat="
       + this.latitude + "&lon="
-      + this.longitude + "&appid=68a40fffe840bac1f3463b4c9a130473&units=metric&lang=fr";
+      + this.longitude + "&appid=68a40fffe840bac1f3463b4c9a130473&lang=fr&units=metric";
 
     this.http.get(this.url).subscribe((data: any) => {
       this.temperature = data.main.temp;
-      this.meteo = data.weather[0].main;
+      this.meteo = data.weather[0].description;
       this.icone_meteo = 'http://openweathermap.org/themes/openweathermap/assets/vendor/owm/img/widgets/' + data.weather[0].icon + '.png';
       console.log("this.temperature: " + data.main.temp + " - this.meteo: " + this.meteo);
       this.name = data.name;
@@ -75,7 +80,7 @@ export class NotificationOpenPage {
 
   getActualitesFromCountry() {
 
-    var url_actu = 'https://newsapi.org/v2/top-headlines?country=' + this.country + '&apiKey=f2856d42fda4472182331feb376d0e50';
+    var url_actu = 'https://newsapi.org/v2/top-headlines?country=' + this.country + '&pageSize=10&apiKey=f2856d42fda4472182331feb376d0e50';
 
     this.http.get(url_actu).subscribe((actu: any) => {
       this.actualites = actu.articles;
@@ -100,6 +105,7 @@ export class NotificationOpenPage {
 
         this.getWeatherFromPosition();
 
+
       })
         .catch((error) => {
           console.log('Error from getCurrentPosition(): ', error.message);
@@ -108,5 +114,9 @@ export class NotificationOpenPage {
       .catch((error) => {
         console.log('Error from platform.ready(): ', error.message);
       });
+  }
+
+  actuSelected(actu){
+    window.open(actu.url, '_self');
   }
 }

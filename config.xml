@@ -5,6 +5,7 @@
     <author email="hi@ionicframework" href="http://ionicframework.com/">Ionic Framework Team</author>
     <content src="index.html" />
     <access origin="*" />
+    <allow-navigation href="*" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
     <allow-intent href="tel:*" />
@@ -45,5 +46,6 @@
     <plugin name="cordova-plugin-nativeaudio" spec="3.0.9" />
     <plugin name="cordova-plugin-media" spec="5.0.2" />
     <plugin name="cordova-plugin-nativegeocoder" spec="3.1.2" />
+    <plugin name="cordova-plugin-brightness" spec="0.2.0" />
     <engine name="android" spec="7.1.1" />
 </widget>

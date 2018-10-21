@@ -11,6 +11,7 @@ import { Media, MediaObject } from '@ionic-native/media';
 
 import { urlToNavGroupStrings } from 'ionic-angular/umd/navigation/url-serializer';
 import { HomePage } from '../home/home';
+import { Brightness } from '@ionic-native/brightness';
 
 
 /**
@@ -39,10 +40,16 @@ export class ClockPage {
   appInBackground: boolean;
   public file = new Audio();
 
-  constructor(private toast: Toast, public localNotifications: LocalNotifications,
+  constructor(private toast: Toast,
+    public localNotifications: LocalNotifications,
     private media: Media,
-    public navCtrl: NavController, public navParams: NavParams, public platform: Platform,
-    public alertCtrl: AlertController, private storage: Storage, public dataBase: DatabaseProvider) {
+    public navCtrl: NavController,
+    public navParams: NavParams,
+    public platform: Platform,
+    public alertCtrl: AlertController,
+    private storage: Storage,
+    public dataBase: DatabaseProvider,
+    private brightness: Brightness) {
 
 
     this.days = [
@@ -163,7 +170,7 @@ export class ClockPage {
     console.log("APP IN BACKGROUND");
   }
 
-  onResume(){
+  onResume() {
     this.appInBackground = false;
     console.log("APP IN FOREGROUND");
   }
@@ -178,15 +185,15 @@ export class ClockPage {
       this.localNotifications.schedule(this.notifications);
       console.log("Modification de la notification");
 
-      if(this.appInBackground){
-       this.localNotifications.on('click').subscribe(() => {
-        this.navCtrl.setRoot(HomePage);   
-        this.navCtrl.push(NotificationOpenPage);
-       });
+      if (this.appInBackground) {
+        this.localNotifications.on('click').subscribe(() => {
+          this.navCtrl.setRoot(HomePage);
+          this.navCtrl.push(NotificationOpenPage);
+        });
       }
-      else{
-        this.localNotifications.on('trigger').subscribe(() => {    
-          this.navCtrl.setRoot(HomePage);   
+      else {
+        this.localNotifications.on('trigger').subscribe(() => {
+          this.navCtrl.setRoot(HomePage);
           this.navCtrl.push(NotificationOpenPage);
         });
       }
@@ -195,13 +202,16 @@ export class ClockPage {
         this.file.src = 'http://www.slspencer.com/Sounds/Halloween/TAUNT019.wav';
         this.file.load();
         this.file.play();
+
+       
+        this.brightness.setBrightness(1.0);
+        
+        
       });
 
       this.notifications = [];
     });
   }
-
-  
 
   updateClockTableInDataBase() {
     this.storage.get('current_username').then((val) => {
