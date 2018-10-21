@@ -10,6 +10,7 @@ import { DatabaseProvider } from './../../providers/database/database';
 import { Media, MediaObject } from '@ionic-native/media';
 
 import { urlToNavGroupStrings } from 'ionic-angular/umd/navigation/url-serializer';
+import { HomePage } from '../home/home';
 
 
 /**
@@ -35,6 +36,7 @@ export class ClockPage {
   chosenMinutes: number;
   notifyTime;
   son: string;
+  appInBackground: boolean;
   public file = new Audio();
 
   constructor(private toast: Toast, public localNotifications: LocalNotifications,
@@ -156,24 +158,50 @@ export class ClockPage {
     }
   }
 
+  onPause() {
+    this.appInBackground = true;
+    console.log("APP IN BACKGROUND");
+  }
+
+  onResume(){
+    this.appInBackground = false;
+    console.log("APP IN FOREGROUND");
+  }
+
   scheduleLocalNotification() {
+    document.addEventListener("pause", this.onPause, false);
+    document.addEventListener("resume", this.onResume, false);
+
     // Cancel any existing notifications
     this.localNotifications.cancelAll().then(() => {
 
       this.localNotifications.schedule(this.notifications);
       console.log("Modification de la notification");
 
+      if(this.appInBackground){
+       this.localNotifications.on('click').subscribe(() => {
+        this.navCtrl.setRoot(HomePage);   
+        this.navCtrl.push(NotificationOpenPage);
+       });
+      }
+      else{
+        this.localNotifications.on('trigger').subscribe(() => {    
+          this.navCtrl.setRoot(HomePage);   
+          this.navCtrl.push(NotificationOpenPage);
+        });
+      }
+
       this.localNotifications.on('trigger').subscribe(() => {
         this.file.src = 'http://www.slspencer.com/Sounds/Halloween/TAUNT019.wav';
         this.file.load();
         this.file.play();
-
-        this.navCtrl.push(NotificationOpenPage);
-
       });
+
       this.notifications = [];
     });
   }
+
+  
 
   updateClockTableInDataBase() {
     this.storage.get('current_username').then((val) => {
