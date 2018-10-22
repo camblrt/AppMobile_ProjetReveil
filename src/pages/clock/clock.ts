@@ -11,6 +11,7 @@ import { Media } from '@ionic-native/media';
 import { File } from '@ionic-native/file';
 
 import { HomePage } from '../home/home';
+import { Brightness } from '@ionic-native/brightness';
 
 
 /**
@@ -39,10 +40,18 @@ export class ClockPage {
   appInBackground: boolean;
   public audioFile = new Audio(); 
 
-  constructor(private toast: Toast, public localNotifications: LocalNotifications,
-    private media: Media, private file : File,
-    public navCtrl: NavController, public navParams: NavParams, public platform: Platform,
-    public alertCtrl: AlertController, private storage: Storage, public dataBase: DatabaseProvider) {
+
+  constructor(private toast: Toast,
+    public localNotifications: LocalNotifications,
+    private media: Media,
+    public navCtrl: NavController,
+    public navParams: NavParams,
+    public platform: Platform,
+    public alertCtrl: AlertController,
+    private storage: Storage,
+    public dataBase: DatabaseProvider,
+    private brightness: Brightness,
+    private file : File) {
 
 
     this.days = [
@@ -183,7 +192,7 @@ export class ClockPage {
     console.log("APP IN BACKGROUND");
   }
 
-  onResume(){
+  onResume() {
     this.appInBackground = false;
     console.log("APP IN FOREGROUND");
   }
@@ -198,15 +207,15 @@ export class ClockPage {
       this.localNotifications.schedule(this.notifications);
       console.log("Modification de la notification");
 
-      if(this.appInBackground){
-       this.localNotifications.on('click').subscribe(() => {
-        this.navCtrl.setRoot(HomePage);   
-        this.navCtrl.push(NotificationOpenPage);
-       });
+      if (this.appInBackground) {
+        this.localNotifications.on('click').subscribe(() => {
+          this.navCtrl.setRoot(HomePage);
+          this.navCtrl.push(NotificationOpenPage);
+        });
       }
-      else{
-        this.localNotifications.on('trigger').subscribe(() => {    
-          this.navCtrl.setRoot(HomePage);   
+      else {
+        this.localNotifications.on('trigger').subscribe(() => {
+          this.navCtrl.setRoot(HomePage);
           this.navCtrl.push(NotificationOpenPage);
         });
       }
@@ -217,6 +226,7 @@ export class ClockPage {
         this.audioFile.src = '../../assets/sounds/'+this.son;
         this.audioFile.load();
         this.audioFile.play();
+        this.brightness.setBrightness(1.0);
       });
 
       this.notifications = [];

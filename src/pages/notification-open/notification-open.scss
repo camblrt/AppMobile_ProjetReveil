@@ -2,4 +2,22 @@ page-notification-open {
 
     color: white;
 
+    .actu-title{
+        padding-bottom: 5%;
+        border-bottom-style: solid;
+        border-width: 0.5px;
+        border-color: #D3D3D3	;
+        margin-top: 10%;
+    }
+
+    .inner-item {
+        background-image: url("data:image/svg+xml;charset=utf-8,<svg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2012%2020'><path%20d='M2,20l-2-2l8-8L0,2l2-2l10,10L2,20z'%20fill='%23c8c7cc'/></svg>");
+        padding-right: 32px;
+        background-position: right 14px center;
+        background-position: right calc(14px + constant(safe-area-inset-right)) center;
+        background-position: right calc(14px + env(safe-area-inset-right)) center;
+        background-repeat: no-repeat;
+        background-size: 14px 14px;
+    }
+
 }
