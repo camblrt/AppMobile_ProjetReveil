@@ -12,6 +12,7 @@ import { IonicStorageModule } from '@ionic/storage';
 import { Vibration } from '@ionic-native/vibration';
 import { Media } from '@ionic-native/media';
 import { NativeGeocoder } from '@ionic-native/native-geocoder';
+import { File } from '@ionic-native/file';
 
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
@@ -61,7 +62,8 @@ import { ListUsersPage } from '../pages/list-users/list-users';
     Vibration,
     Geolocation,
     Media,
-    NativeGeocoder
+    NativeGeocoder,
+    File
   ]
 })
 export class AppModule {}

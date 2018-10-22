@@ -7,9 +7,9 @@ import { LocalNotifications } from '@ionic-native/local-notifications';
 import * as moment from 'moment';
 import { Storage } from '@ionic/storage';
 import { DatabaseProvider } from './../../providers/database/database';
-import { Media, MediaObject } from '@ionic-native/media';
+import { Media } from '@ionic-native/media';
+import { File } from '@ionic-native/file';
 
-import { urlToNavGroupStrings } from 'ionic-angular/umd/navigation/url-serializer';
 import { HomePage } from '../home/home';
 
 
@@ -26,7 +26,7 @@ import { HomePage } from '../home/home';
   templateUrl: 'clock.html',
 })
 export class ClockPage {
-
+  soundList = [];
   nameAlarm: string;
   textAlarm: string;
   notifications: any[] = [];
@@ -37,10 +37,10 @@ export class ClockPage {
   notifyTime;
   son: string;
   appInBackground: boolean;
-  public file = new Audio();
+  public audioFile = new Audio(); 
 
   constructor(private toast: Toast, public localNotifications: LocalNotifications,
-    private media: Media,
+    private media: Media, private file : File,
     public navCtrl: NavController, public navParams: NavParams, public platform: Platform,
     public alertCtrl: AlertController, private storage: Storage, public dataBase: DatabaseProvider) {
 
@@ -67,6 +67,8 @@ export class ClockPage {
           this.son = data.rows.item(i).son;
         }
 
+        console.log("son is " + this.son);
+
         var today = new Date();
         this.notifyTime = moment(new Date(today.getFullYear(), today.getMonth(), today.getDate(), this.chosenHours, this.chosenMinutes, 0)).format();
         this.dbTOpagesDays(this.dayDB)
@@ -74,6 +76,20 @@ export class ClockPage {
         .catch(error => {
           console.log("Error from selectClockForUserInDB(): " + error.message);
         });
+    this.file.listDir(this.file.applicationDirectory,'www/assets/sounds')
+      .then(files => {
+          console.log(files);
+          for(let soundFle of files){
+            if(this.son == soundFle.name){
+              this.soundList.push({name : soundFle.name, used: true})
+            }
+            else{
+              this.soundList.push({name : soundFle.name, used: false})
+            }
+            
+          }
+      })
+      .catch(err => console.log('Directory doesn\'t exist'));
     });
   }
 
@@ -147,14 +163,18 @@ export class ClockPage {
             firstAt: firstNotificationTime,
             every: 'minute',
             //Besoin de count 1000 sinon notifications sonne en boucle
-            count: 1000
+            count: 3000
           },
           smallIcon: 'res//assets/imgs/logo.png',
           icon: 'https://d1nhio0ox7pgb.cloudfront.net/_img/g_collection_png/standard/256x256/pumpkin_halloween.png',
         };
         this.notifications.push(notification);
       }
-
+    }
+    for (let sound of this.soundList) {
+      if(sound.used){
+        this.son = sound.name;
+      }
     }
   }
 
@@ -191,21 +211,21 @@ export class ClockPage {
         });
       }
 
+      
       this.localNotifications.on('trigger').subscribe(() => {
-        this.file.src = 'http://www.slspencer.com/Sounds/Halloween/TAUNT019.wav';
-        this.file.load();
-        this.file.play();
+        console.log("notification son : " + this.son)
+        this.audioFile.src = '../../assets/sounds/'+this.son;
+        this.audioFile.load();
+        this.audioFile.play();
       });
 
       this.notifications = [];
     });
   }
 
-  
-
   updateClockTableInDataBase() {
     this.storage.get('current_username').then((val) => {
-      this.dataBase.updateClockForUserInDB(this.nameAlarm, this.textAlarm, this.chosenHours, this.chosenMinutes, this.dayDB, "test son", val)
+      this.dataBase.updateClockForUserInDB(this.nameAlarm, this.textAlarm, this.chosenHours, this.chosenMinutes, this.dayDB, this.son, val)
         .then(() => {
           console.log("DB updated");
         })
@@ -238,9 +258,12 @@ export class ClockPage {
       }
     );
 
-    this.file.src = 'http://www.slspencer.com/Sounds/Halloween/Cave.wav';
-    this.file.load();
-    this.file.play();
+    this.audioFile.src = 'http://www.slspencer.com/Sounds/Halloween/Cave.wav';
+    this.audioFile.load();
+    this.audioFile.play();
   }
 
+  soundSelected(sound: string){
+    this.son = sound;
+  }
 }

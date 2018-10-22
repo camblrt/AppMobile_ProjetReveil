@@ -16,7 +16,6 @@ import { Storage } from '@ionic/storage';
   templateUrl: 'clock-list.html',
 })
 export class ClockListPage {
-
   name: string;
   days: string;
   hours: number;
@@ -33,6 +32,9 @@ export class ClockListPage {
     this.hours = 0;
     this.minutes = "00";
   }
+
+
+
   getFromDB() {
     this.dataBaseProviser.selectClockFromDataBase();
   }

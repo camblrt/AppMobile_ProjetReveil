@@ -22,14 +22,19 @@
           display=left (ionChange)="timeChange($event)"></ion-datetime>
         </ion-item>
  
-        <ion-item *ngFor="let day of days">
+       <ion-item *ngFor="let day of days">
             <ion-label>{{day.title}}</ion-label>
             <ion-checkbox [(ngModel)]="day.checked" color="primary"></ion-checkbox>
         </ion-item>
- 
-        <ion-item>
-                <ion-label>Son: {{son}}</ion-label>
-            </ion-item>
+        <div><br>Choix du son :</div>
+        <select>
+            <option *ngFor="let sound of soundList">
+                <ion-label>{{sound.name}}</ion-label>
+                <ion-checkbox [(ngModel)]="sound.used" color="primary"></ion-checkbox>
+            </option>
+        </select>
+        
+        
     </ion-list>
  
 </ion-content>
