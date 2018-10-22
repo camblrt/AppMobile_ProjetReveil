@@ -17,7 +17,7 @@
             <ion-input  type="text" value=""  placeholder="Description de l'alarme" [(ngModel)]="textAlarm"></ion-input>
         </ion-item>
         <ion-item>
-          <ion-label>Time:</ion-label>
+          <ion-label>Jour:</ion-label>
           <ion-datetime displayFormat="h:mm A" pickerFormat="h mm A" [(ngModel)]="notifyTime"
           display=left (ionChange)="timeChange($event)"></ion-datetime>
         </ion-item>
@@ -26,13 +26,11 @@
             <ion-label>{{day.title}}</ion-label>
             <ion-checkbox [(ngModel)]="day.checked" color="primary"></ion-checkbox>
         </ion-item>
-        <div><br>Choix du son :</div>
-        <select>
-            <option *ngFor="let sound of soundList">
+        <div><br>Choix du son :<ion-input  type="text" value=""  placeholder="Source URL" [(ngModel)]="srcURL"></ion-input></div>
+        <ion-item *ngFor="let sound of soundList">
                 <ion-label>{{sound.name}}</ion-label>
-                <ion-checkbox [(ngModel)]="sound.used" color="primary"></ion-checkbox>
-            </option>
-        </select>
+                <ion-checkbox [(ngModel)]="sound.used"></ion-checkbox>
+        </ion-item>
         
         
     </ion-list>

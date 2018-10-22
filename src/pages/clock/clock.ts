@@ -7,7 +7,6 @@ import { LocalNotifications } from '@ionic-native/local-notifications';
 import * as moment from 'moment';
 import { Storage } from '@ionic/storage';
 import { DatabaseProvider } from './../../providers/database/database';
-import { Media } from '@ionic-native/media';
 import { File } from '@ionic-native/file';
 
 import { HomePage } from '../home/home';
@@ -27,7 +26,7 @@ import { Brightness } from '@ionic-native/brightness';
   templateUrl: 'clock.html',
 })
 export class ClockPage {
-  soundList = [];
+  
   nameAlarm: string;
   textAlarm: string;
   notifications: any[] = [];
@@ -36,14 +35,16 @@ export class ClockPage {
   chosenHours: number;
   chosenMinutes: number;
   notifyTime;
-  son: string;
+
+  son: {name: string, src: string};
+  soundList = [];
+  srcURL: string;
   appInBackground: boolean;
   public audioFile = new Audio(); 
 
 
   constructor(private toast: Toast,
     public localNotifications: LocalNotifications,
-    private media: Media,
     public navCtrl: NavController,
     public navParams: NavParams,
     public platform: Platform,
@@ -53,7 +54,7 @@ export class ClockPage {
     private brightness: Brightness,
     private file : File) {
 
-
+    this.son = {name: "", src: ""};
     this.days = [
       { title: 'Lundi', dayCode: 1, checked: false },
       { title: 'Mardi', dayCode: 2, checked: false },
@@ -73,10 +74,23 @@ export class ClockPage {
           this.chosenHours = data.rows.item(i).heure;
           this.chosenMinutes = data.rows.item(i).minute;
           this.dayDB = data.rows.item(i).jour;
-          this.son = data.rows.item(i).son;
+          this.son.name = data.rows.item(i).son;
         }
 
-        console.log("son is " + this.son);
+        this.file.listDir(this.file.applicationDirectory,'www/assets/sounds')
+        .then(files => {
+          console.log(files)
+            for(let soundFle of files){
+              console.log(" File list : sound contain : " + soundFle)
+              if(this.son.name == soundFle.name){
+                this.soundList.push({name : soundFle.name, used: true, src: '../../assets/sounds/'+this.son.name})
+              }
+              else{
+                this.soundList.push({name : soundFle.name, used: false, src: '../../assets/sounds/'+this.son.name})
+              }
+            }
+        })
+        .catch(err => console.log('Directory doesn\'t exist'+ err));
 
         var today = new Date();
         this.notifyTime = moment(new Date(today.getFullYear(), today.getMonth(), today.getDate(), this.chosenHours, this.chosenMinutes, 0)).format();
@@ -85,20 +99,6 @@ export class ClockPage {
         .catch(error => {
           console.log("Error from selectClockForUserInDB(): " + error.message);
         });
-    this.file.listDir(this.file.applicationDirectory,'www/assets/sounds')
-      .then(files => {
-          console.log(files);
-          for(let soundFle of files){
-            if(this.son == soundFle.name){
-              this.soundList.push({name : soundFle.name, used: true})
-            }
-            else{
-              this.soundList.push({name : soundFle.name, used: false})
-            }
-            
-          }
-      })
-      .catch(err => console.log('Directory doesn\'t exist'));
     });
   }
 
@@ -170,9 +170,10 @@ export class ClockPage {
           text: this.textAlarm,
           trigger: {
             firstAt: firstNotificationTime,
+            //
             every: 'minute',
             //Besoin de count 1000 sinon notifications sonne en boucle
-            count: 3000
+            count: 10000
           },
           smallIcon: 'res//assets/imgs/logo.png',
           icon: 'https://d1nhio0ox7pgb.cloudfront.net/_img/g_collection_png/standard/256x256/pumpkin_halloween.png',
@@ -180,9 +181,16 @@ export class ClockPage {
         this.notifications.push(notification);
       }
     }
-    for (let sound of this.soundList) {
-      if(sound.used){
-        this.son = sound.name;
+    if(this.srcURL != ""){
+      this.son.name = "Private URL";
+      this.son.src = this.srcURL;
+    }
+    else{
+      for (let sound of this.soundList) {
+        if(sound.used){
+          this.son.name = sound.name;
+          this.son.src = sound.src;
+        }
       }
     }
   }
@@ -220,10 +228,8 @@ export class ClockPage {
         });
       }
 
-      
       this.localNotifications.on('trigger').subscribe(() => {
-        console.log("notification son : " + this.son)
-        this.audioFile.src = '../../assets/sounds/'+this.son;
+        this.audioFile.src = this.son.src;
         this.audioFile.load();
         this.audioFile.play();
         this.brightness.setBrightness(1.0);
@@ -235,7 +241,7 @@ export class ClockPage {
 
   updateClockTableInDataBase() {
     this.storage.get('current_username').then((val) => {
-      this.dataBase.updateClockForUserInDB(this.nameAlarm, this.textAlarm, this.chosenHours, this.chosenMinutes, this.dayDB, this.son, val)
+      this.dataBase.updateClockForUserInDB(this.nameAlarm, this.textAlarm, this.chosenHours, this.chosenMinutes, this.dayDB, this.son.name, val)
         .then(() => {
           console.log("DB updated");
         })
@@ -260,20 +266,19 @@ export class ClockPage {
   }
 
   cancelAll() {
-    this.localNotifications.cancelAll();
-
-    this.toast.show('Alarm cancelled', '5000', 'center').subscribe(
-      toast => {
-        console.log(toast);
+    console.log("Im Cancel all")
+    this.localNotifications.cancelAll().then(() => {
+      console.log("In schedule cancel")
+      this.toast.show('Alarm cancelled', '5000', 'center').subscribe(
+        toast => {
+          console.log("Alarme annulé");
+        }
+      );
+  
+      this.audioFile.src = 'http://www.slspencer.com/Sounds/Halloween/Cave.wav';
+      this.audioFile.load();
+      this.audioFile.play();
       }
-    );
-
-    this.audioFile.src = 'http://www.slspencer.com/Sounds/Halloween/Cave.wav';
-    this.audioFile.load();
-    this.audioFile.play();
-  }
-
-  soundSelected(sound: string){
-    this.son = sound;
+    )
   }
 }
