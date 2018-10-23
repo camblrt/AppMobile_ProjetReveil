@@ -1,3 +1,4 @@
+import { HttpClient } from '@angular/common/http';
 import { NotificationOpenPage } from './../notification-open/notification-open';
 
 import { Toast } from '@ionic-native/toast';
@@ -11,6 +12,7 @@ import { File } from '@ionic-native/file';
 
 import { HomePage } from '../home/home';
 import { Brightness } from '@ionic-native/brightness';
+import { Observable } from 'rxjs/Observable';
 
 
 /**
@@ -52,7 +54,8 @@ export class ClockPage {
     private storage: Storage,
     public dataBase: DatabaseProvider,
     private brightness: Brightness,
-    private file : File) {
+    private file : File,
+    private http: HttpClient) {
 
     this.son = {name: "", src: ""};
     this.days = [
@@ -79,9 +82,7 @@ export class ClockPage {
 
         this.file.listDir(this.file.applicationDirectory,'www/assets/sounds')
         .then(files => {
-          console.log(files)
             for(let soundFle of files){
-              console.log(" File list : sound contain : " + soundFle)
               if(this.son.name == soundFle.name){
                 this.soundList.push({name : soundFle.name, used: true, src: '../../assets/sounds/'+soundFle.name})
               }
@@ -162,7 +163,7 @@ export class ClockPage {
         firstNotificationTime.setSeconds(0);
 
         //to test easily
-        firstNotificationTime = new Date(new Date().getTime());
+        firstNotificationTime = new Date(new Date().getTime() + 6000);
 
         let notification = {
           id: 1,
@@ -170,40 +171,29 @@ export class ClockPage {
           text: this.textAlarm,
           trigger: {
             at: firstNotificationTime,
-            //
             //every: 'minute',
             //Besoin de count 1000 sinon notifications sonne en boucle
             //count: 10000
           },
           smallIcon: 'res//assets/imgs/logo.png',
+          sound: null,
           icon: 'https://d1nhio0ox7pgb.cloudfront.net/_img/g_collection_png/standard/256x256/pumpkin_halloween.png',
         };
         this.notifications.push(notification);
       }
     }
-   /* console.log(this.srcURL)
     if(this.srcURL != null){
       this.son.name = "Private URL";
       this.son.src = this.srcURL;
-    }*/
-    //else{
+    }
+    else{
       for (let sound of this.soundList) {
         if(sound.used){
           this.son.name = sound.name;
           this.son.src = sound.src;
         }
       }
-    //}
-  }
-
-  onPause() {
-    this.appInBackground = true;
-    console.log("APP IN BACKGROUND");
-  }
-
-  onResume() {
-    this.appInBackground = false;
-    console.log("APP IN FOREGROUND");
+    }
   }
 
   scheduleLocalNotification() {
@@ -229,7 +219,6 @@ export class ClockPage {
         });
       }
 
-      console.log(this.son.src);
       this.localNotifications.on('trigger').subscribe(() => {
         this.audioFile.src = this.son.src;
         this.audioFile.load();
@@ -268,9 +257,7 @@ export class ClockPage {
   }
 
   cancelAll() {
-    console.log("Im Cancel all")
     this.localNotifications.cancelAll().then(() => {
-      console.log("In schedule cancel")
       this.toast.show('Alarm cancelled', '5000', 'center').subscribe(
         toast => {
           console.log("Alarme annulé");
@@ -282,5 +269,15 @@ export class ClockPage {
       this.audioFile.play();
       }
     )
+  }
+
+  onPause() {
+    this.appInBackground = true;
+    console.log("APP IN BACKGROUND");
+  }
+
+  onResume() {
+    this.appInBackground = false;
+    console.log("APP IN FOREGROUND");
   }
 }
