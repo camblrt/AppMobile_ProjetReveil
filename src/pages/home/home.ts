@@ -16,11 +16,7 @@ export class HomePage {
   current_user: string;
   constructor(public navCtrl: NavController,
     public databaseUser: DatabaseProvider,
-    private storage: Storage) {
-
-    this.getCurrentUserFromStorage();
-
-  }
+    private storage: Storage) { }
 
   displayClockOfCurrentUser() {
     this.navCtrl.push(ClockListPage);

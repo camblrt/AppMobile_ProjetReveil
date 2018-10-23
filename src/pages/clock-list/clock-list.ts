@@ -44,20 +44,23 @@ export class ClockListPage {
 
   ionViewWillEnter() {
     return this.storage.get('clock')
-    .then((val) => {
-      if(val == null){
-        this.navCtrl.push(ClockPage);
-      }
-      this.name = val[0];
-      this.hours = val[1];
-      if(val[2] < 10){
-        this.minutes = "0" + val[2];
-      }
-      else{
-        this.minutes = val[2];
-      }
-      
-      this.days = val[3];
-    });
+      .then((val) => {
+        if (val == null) {
+          this.navCtrl.push(ClockPage);
+        }
+        else {
+          this.name = val[0];
+          this.hours = val[1];
+          if (val[2] < 10) {
+            this.minutes = "0" + val[2];
+          }
+          else {
+            this.minutes = val[2];
+          }
+
+          this.days = val[3];
+
+        }
+      });
   }
 }

@@ -1,9 +1,8 @@
-import { HttpClient } from '@angular/common/http';
 import { NotificationOpenPage } from './../notification-open/notification-open';
 
 import { Toast } from '@ionic-native/toast';
 import { Component } from '@angular/core';
-import { NavController, NavParams, Platform, AlertController } from 'ionic-angular';
+import { NavController, NavParams, Platform, AlertController, SelectPopover } from 'ionic-angular';
 import { LocalNotifications } from '@ionic-native/local-notifications';
 import * as moment from 'moment';
 import { Storage } from '@ionic/storage';
@@ -12,7 +11,8 @@ import { File } from '@ionic-native/file';
 
 import { HomePage } from '../home/home';
 import { Brightness } from '@ionic-native/brightness';
-import { Observable } from 'rxjs/Observable';
+import { BackgroundMode } from '@ionic-native/background-mode';
+
 
 
 /**
@@ -55,7 +55,7 @@ export class ClockPage {
     public dataBase: DatabaseProvider,
     private brightness: Brightness,
     private file : File,
-    private http: HttpClient) {
+    private backgroundMode: BackgroundMode) {
 
     this.son = {name: "", src: ""};
     this.days = [
@@ -80,18 +80,7 @@ export class ClockPage {
           this.son.name = data.rows.item(i).son;
         }
 
-        this.file.listDir(this.file.applicationDirectory,'www/assets/sounds')
-        .then(files => {
-            for(let soundFle of files){
-              if(this.son.name == soundFle.name){
-                this.soundList.push({name : soundFle.name, used: true, src: '../../assets/sounds/'+soundFle.name})
-              }
-              else{
-                this.soundList.push({name : soundFle.name, used: false, src: '../../assets/sounds/'+soundFle.name})
-              }
-            }
-        })
-        .catch(err => console.log('Directory doesn\'t exist'+ err));
+        this.getSoundJSON();
 
         var today = new Date();
         this.notifyTime = moment(new Date(today.getFullYear(), today.getMonth(), today.getDate(), this.chosenHours, this.chosenMinutes, 0)).format();
@@ -101,6 +90,22 @@ export class ClockPage {
           console.log("Error from selectClockForUserInDB(): " + error.message);
         });
     });
+  }
+
+  getSoundJSON(){
+    this.file.readAsText(this.file.applicationDirectory + "www/assets", "sons.json").then(data => {
+      let jsonSon = JSON.parse(data)
+      for(let sound of jsonSon){
+        if(this.son.name == sound.name){
+          this.soundList.push({name : sound.name, used: true, src: sound.src})
+        }
+        else{
+          this.soundList.push({name : sound.name, used: false, src: sound.src})
+        }      }
+    })
+    .catch(err => {
+      console.log(err);
+    })
   }
 
   ionViewDidLoad() {
@@ -196,13 +201,17 @@ export class ClockPage {
     }
   }
 
+  async delay(ms: number) {
+    return new Promise( resolve => setTimeout(resolve, ms) );
+  }
+
   scheduleLocalNotification() {
     document.addEventListener("pause", this.onPause, false);
     document.addEventListener("resume", this.onResume, false);
 
     // Cancel any existing notifications
     this.localNotifications.cancelAll().then(() => {
-
+      
       this.localNotifications.schedule(this.notifications);
       console.log("Modification de la notification");
 
@@ -214,6 +223,7 @@ export class ClockPage {
       }
       else {
         this.localNotifications.on('trigger').subscribe(() => {
+          console.log("Notification");
           this.navCtrl.setRoot(HomePage);
           this.navCtrl.push(NotificationOpenPage);
         });
@@ -223,7 +233,14 @@ export class ClockPage {
         this.audioFile.src = this.son.src;
         this.audioFile.load();
         this.audioFile.play();
-        this.brightness.setBrightness(1.0);
+
+        this.backgroundMode.wakeUp();
+
+        for(var brightnessValue=0.0; brightnessValue<1.0; brightnessValue+=0.1){
+          this.delay(10000);
+          this.brightness.setBrightness(brightnessValue);
+        }
+
       });
 
       this.notifications = [];
@@ -241,6 +258,8 @@ export class ClockPage {
         });
     });
   }
+
+
 
   createScheduleNotificationAndSaveClockValue() {
 

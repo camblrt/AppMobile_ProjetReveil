@@ -37,11 +37,6 @@ export class NotificationOpenPage {
 
   getWeatherFromPosition() {
 
-    let alert = this.alertCtrl.create({
-      title: 'API error',
-      buttons: ['OK']
-    });
-
     this.url = "http://api.openweathermap.org/data/2.5/weather?lat="
       + this.latitude + "&lon="
       + this.longitude + "&appid=68a40fffe840bac1f3463b4c9a130473&lang=fr&units=metric";
@@ -57,6 +52,11 @@ export class NotificationOpenPage {
       this.getCountryFromPosition();
     },
       (error) => {
+        
+        let alert = this.alertCtrl.create({
+          title: error.message,
+          buttons: ['OK']
+        });
         console.log("Error from getWeatherFromPosition(): " + error.message);
         alert.present();
       }

@@ -20,6 +20,7 @@
     "@angular/http": "5.2.11",
     "@angular/platform-browser": "5.2.11",
     "@angular/platform-browser-dynamic": "5.2.11",
+    "@ionic-native/background-mode": "^4.16.0",
     "@ionic-native/brightness": "^4.16.0",
     "@ionic-native/core": "~4.15.0",
     "@ionic-native/file": "^4.16.0",
@@ -36,6 +37,7 @@
     "@ionic/storage": "^2.2.0",
     "cordova-android": "7.1.1",
     "cordova-plugin-advanced-http": "2.0.1",
+    "cordova-plugin-background-mode": "0.7.2",
     "cordova-plugin-badge": "^0.8.7",
     "cordova-plugin-brightness": "^0.2.0",
     "cordova-plugin-device": "^2.0.2",
@@ -92,7 +94,8 @@
       "cordova-plugin-media": {},
       "cordova-plugin-file": {},
       "cordova-plugin-brightness": {},
-      "cordova-plugin-advanced-http": {}
+      "cordova-plugin-advanced-http": {},
+      "cordova-plugin-background-mode": {}
     }
   }
 }

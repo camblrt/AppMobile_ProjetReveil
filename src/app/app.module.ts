@@ -14,7 +14,8 @@ import { Media } from '@ionic-native/media';
 import { NativeGeocoder } from '@ionic-native/native-geocoder';
 import { File } from '@ionic-native/file';
 import { Brightness } from '@ionic-native/brightness';
-import { HTTP } from '@ionic-native/http';
+// import { HTTP } from '@ionic-native/http';
+import { BackgroundMode } from '@ionic-native/background-mode';
 
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
@@ -67,7 +68,8 @@ import { ListUsersPage } from '../pages/list-users/list-users';
     NativeGeocoder,
     File,
     Brightness,
-    HTTP
+    // HTTP,
+    BackgroundMode
   ]
 })
 export class AppModule {}
