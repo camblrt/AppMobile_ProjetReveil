@@ -83,10 +83,10 @@ export class ClockPage {
             for(let soundFle of files){
               console.log(" File list : sound contain : " + soundFle)
               if(this.son.name == soundFle.name){
-                this.soundList.push({name : soundFle.name, used: true, src: '../../assets/sounds/'+this.son.name})
+                this.soundList.push({name : soundFle.name, used: true, src: '../../assets/sounds/'+soundFle.name})
               }
               else{
-                this.soundList.push({name : soundFle.name, used: false, src: '../../assets/sounds/'+this.son.name})
+                this.soundList.push({name : soundFle.name, used: false, src: '../../assets/sounds/'+soundFle.name})
               }
             }
         })
@@ -169,11 +169,11 @@ export class ClockPage {
           title: this.nameAlarm,
           text: this.textAlarm,
           trigger: {
-            firstAt: firstNotificationTime,
+            at: firstNotificationTime,
             //
-            every: 'minute',
+            //every: 'minute',
             //Besoin de count 1000 sinon notifications sonne en boucle
-            count: 10000
+            //count: 10000
           },
           smallIcon: 'res//assets/imgs/logo.png',
           icon: 'https://d1nhio0ox7pgb.cloudfront.net/_img/g_collection_png/standard/256x256/pumpkin_halloween.png',
@@ -181,18 +181,19 @@ export class ClockPage {
         this.notifications.push(notification);
       }
     }
-    if(this.srcURL != ""){
+   /* console.log(this.srcURL)
+    if(this.srcURL != null){
       this.son.name = "Private URL";
       this.son.src = this.srcURL;
-    }
-    else{
+    }*/
+    //else{
       for (let sound of this.soundList) {
         if(sound.used){
           this.son.name = sound.name;
           this.son.src = sound.src;
         }
       }
-    }
+    //}
   }
 
   onPause() {
@@ -228,6 +229,7 @@ export class ClockPage {
         });
       }
 
+      console.log(this.son.src);
       this.localNotifications.on('trigger').subscribe(() => {
         this.audioFile.src = this.son.src;
         this.audioFile.load();
