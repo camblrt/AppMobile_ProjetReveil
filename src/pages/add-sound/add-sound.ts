@@ -4,7 +4,7 @@ import { Toast } from '@ionic-native/toast';
 import { ClockPage } from '../clock/clock';
 import { Storage } from '@ionic/storage';
 
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController} from 'ionic-angular';
 
 /**
  * Generated class for the AddSoundPage page.

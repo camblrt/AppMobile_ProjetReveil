@@ -1,4 +1,3 @@
-
 import { BrowserModule } from '@angular/platform-browser';
 import { ErrorHandler, NgModule } from '@angular/core';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
@@ -10,12 +9,8 @@ import {LocalNotifications} from "@ionic-native/local-notifications"
 import { HttpClientModule } from "@angular/common/http"
 import { Geolocation } from '@ionic-native/geolocation';
 import { IonicStorageModule } from '@ionic/storage';
-import { Vibration } from '@ionic-native/vibration';
-import { Media } from '@ionic-native/media';
 import { NativeGeocoder } from '@ionic-native/native-geocoder';
-import { File } from '@ionic-native/file';
 import { Brightness } from '@ionic-native/brightness';
-// import { HTTP } from '@ionic-native/http';
 import { BackgroundMode } from '@ionic-native/background-mode';
 
 import { AddSoundPage } from './../pages/add-sound/add-sound';
@@ -66,13 +61,9 @@ import { ListUsersPage } from '../pages/list-users/list-users';
     DatabaseProvider,
     SQLite,
     Toast,
-    Vibration,
     Geolocation,
-    Media,
     NativeGeocoder,
-    File,
     Brightness,
-    // HTTP,
     BackgroundMode
   ]
 })
