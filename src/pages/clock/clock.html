@@ -35,7 +35,7 @@
           <ion-list  [(ngModel)]="sound_used" radio-group>
             <ion-item *ngFor="let sound of soundList">
                 <ion-label>{{sound.name}}</ion-label>
-                <ion-radio [value]="sound.name"></ion-radio>
+                <ion-radio [value]="sound.name" [checked]="sound.used"></ion-radio>
             </ion-item>
         </ion-list>
       </ion-list>
