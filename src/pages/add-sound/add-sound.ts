@@ -35,7 +35,7 @@ export class AddSoundPage {
         () => {
           console.log('Sound Added');
         });
-      this.navCtrl.setRoot(ClockPage);
+      this.navCtrl.pop();
     });
   }
 

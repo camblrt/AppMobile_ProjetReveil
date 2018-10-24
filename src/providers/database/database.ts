@@ -42,7 +42,7 @@ export class DatabaseProvider {
     return this.db.executeSql('INSERT INTO user VALUES(?,?)', [username, password])
       .then(res => {
         this.toast.show('User registered', '5000', 'center');
-        this.insertNewClockInDataBase("Nouvelle Alarme", "Il est l'heure!", 0, 0, "Lundi Jeudi", "Nouveau Son", username);
+        this.insertNewClockInDataBase("New Alarm", "It's time!", 0, 0, "Lundi Jeudi", "Nouveau Son", username);
         this.insertNewSoundInDataBase("BoomBoomBoom","http://egeland.net/pub/ringtones/BoomBoomBoom.mp3",username);
         this.insertNewSoundInDataBase("Gentle","http://egeland.net/pub/ringtones/Gentle.mp3",username);
       }).catch(error => {

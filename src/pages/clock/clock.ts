@@ -288,13 +288,4 @@ export class ClockPage {
   addSound(){
     this.navCtrl.push(AddSoundPage);
   }
-  onPause() {
-    this.appInBackground = true;
-    console.log("APP IN BACKGROUND");
-  }
-
-  onResume() {
-    this.appInBackground = false;
-    console.log("APP IN FOREGROUND");
-  }
 }
