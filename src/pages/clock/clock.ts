@@ -2,7 +2,7 @@ import { NotificationOpenPage } from './../notification-open/notification-open';
 
 import { Toast } from '@ionic-native/toast';
 import { Component } from '@angular/core';
-import { NavController, NavParams, Platform, AlertController, SelectPopover } from 'ionic-angular';
+import { NavController, NavParams, Platform, AlertController } from 'ionic-angular';
 import { LocalNotifications } from '@ionic-native/local-notifications';
 import * as moment from 'moment';
 import { Storage } from '@ionic/storage';
@@ -93,8 +93,21 @@ export class ClockPage {
           this.dayDB = data.rows.item(i).jour;
           this.son.name = data.rows.item(i).son;
         }
-
-        this.getSoundJSON();
+        
+        this.dataBase.selectSoundFromDataBase(userIs).then( data => {
+          let lengthDB = data.rows.length;
+            for (var i = 0; i < lengthDB; i++) {
+              if (this.son.name ==  data.rows.item(i).name) {
+                this.soundList.push({ name:  data.rows.item(i).name, used: true, src:  data.rows.item(i).src })
+              }
+              else {
+                this.soundList.push({ name:  data.rows.item(i).name, used: false, src:  data.rows.item(i).src })
+              }
+            }
+        })
+        .catch(error => {
+          console.log("Error from selectSoundForUserInDB(): " + error.message);
+        });
 
         var today = new Date();
         this.notifyTime = moment(new Date(today.getFullYear(), today.getMonth(), today.getDate(), this.chosenHours, this.chosenMinutes, 0)).format();
@@ -104,26 +117,6 @@ export class ClockPage {
           console.log("Error from selectClockForUserInDB(): " + error.message);
         });
     });
-
-
-  }
-
-  getSoundJSON() {
-    this.file.readAsText(this.file.applicationDirectory + "www/assets", "sons.json").then(data => {
-      let jsonSon = JSON.parse(data)
-      for (let sound of jsonSon) {
-        if (this.son.name == sound.name) {
-          this.soundList.push({ name: sound.name, used: true, src: sound.src })
-        }
-        else {
-          this.soundList.push({ name: sound.name, used: false, src: sound.src })
-        }
-      }
-      console.log(this.soundList);
-    })
-      .catch(err => {
-        console.log(err);
-      })
   }
 
   ionViewDidLoad() {
