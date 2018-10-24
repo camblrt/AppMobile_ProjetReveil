@@ -1,7 +1,7 @@
 <ion-header>
   <ion-navbar>
     <ion-title>
-      Bienvenue {{current_user}}
+      Welcome {{current_user}}
     </ion-title>
   </ion-navbar>
 </ion-header>
@@ -9,10 +9,10 @@
 <ion-content class="home vertical-align-content" padding>
   <ion-grid>
     <ion-row>
-      <button ion-button round full color="orange" class="button-app" (click)='displayClockOfCurrentUser();'>Voir votre réveil</button>
+      <button ion-button round full color="orange" class="button-app" (click)='displayClockOfCurrentUser();'>See your clock</button>
     </ion-row>
     <ion-row>
-      <button ion-button round full color="orange" class="button-app" (click)='userList();'>Vous n'etes pas {{current_user}}?</button>   
+      <button ion-button round full color="orange" class="button-app" (click)='userList();'>You are not {{current_user}}?</button>   
     </ion-row>
   </ion-grid>
 </ion-content>
