@@ -27,14 +27,12 @@ export class ClockListPage {
     public dataBaseProviser: DatabaseProvider,
     private storage: Storage) {
 
-    this.name = "Pas d'alarmes";
-    this.days = "Pas d'alarmes";
+    this.name = "No alarm";
+    this.days = "No alarm";
     this.hours = 0;
     this.minutes = "00";
   }
-
-
-
+  
   getFromDB() {
     this.dataBaseProviser.selectClockFromDataBase();
   }

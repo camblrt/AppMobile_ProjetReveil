@@ -25,7 +25,7 @@ export class AddSoundPage {
   constructor(public navCtrl: NavController,
     public databaseUser: DatabaseProvider,
     private storage: Storage,
-    private toast: Toast,) {
+    private toast: Toast, ) {
   }
 
   register() {
@@ -35,7 +35,11 @@ export class AddSoundPage {
         () => {
           console.log('Sound Added');
         });
-      this.navCtrl.pop();
+      let currentIndex = this.navCtrl.getActive().index;
+      this.navCtrl.push(ClockPage).then(() => {
+        this.navCtrl.remove(currentIndex);
+        this.navCtrl.remove(currentIndex - 1);
+      });
     });
   }
 

@@ -70,17 +70,15 @@ export class ClockPage {
     private brightness: Brightness,
     private backgroundMode: BackgroundMode) {
 
-      // this.subcriber.unsubscribe();
-
     this.son = { name: "", src: "", userIs: "" };
     this.days = [
-      { title: 'Lundi', dayCode: 1, checked: false },
-      { title: 'Mardi', dayCode: 2, checked: false },
-      { title: 'Mercredi', dayCode: 3, checked: false },
-      { title: 'Jeudi', dayCode: 4, checked: false },
-      { title: 'Vendredi', dayCode: 5, checked: false },
-      { title: 'Samedi', dayCode: 6, checked: false },
-      { title: 'Dimanche', dayCode: 0, checked: false }
+      { title: 'Monday', dayCode: 1, checked: false },
+      { title: 'Tuesday', dayCode: 2, checked: false },
+      { title: 'Wednesday', dayCode: 3, checked: false },
+      { title: 'Thursday', dayCode: 4, checked: false },
+      { title: 'Friday', dayCode: 5, checked: false },
+      { title: 'Saturday', dayCode: 6, checked: false },
+      { title: 'Sunday', dayCode: 0, checked: false }
     ];
 
     this.storage.get('current_username').then((userIs) => {
@@ -117,28 +115,29 @@ export class ClockPage {
         });
       }
     });
+
   }
 
   dbTOpagesDays(dayDB) {
-    if (dayDB.includes("Lundi")) {
+    if (dayDB.includes("Monday")) {
       this.days[0].checked = true;
     }
-    if (dayDB.includes("Mardi")) {
+    if (dayDB.includes("Tuesday")) {
       this.days[1].checked = true;
     }
-    if (dayDB.includes("Mercredi")) {
+    if (dayDB.includes("Wednesday")) {
       this.days[2].checked = true;
     }
-    if (dayDB.includes("Jeudi")) {
+    if (dayDB.includes("Thursday")) {
       this.days[3].checked = true;
     }
-    if (dayDB.includes("Vendredi")) {
+    if (dayDB.includes("Friday")) {
       this.days[4].checked = true;
     }
-    if (dayDB.includes("Samedi")) {
+    if (dayDB.includes("Saturday")) {
       this.days[5].checked = true;
     }
-    if (dayDB.includes("Dimanche")) {
+    if (dayDB.includes("Sunday")) {
       this.days[6].checked = true;
     }
   }
@@ -209,7 +208,7 @@ export class ClockPage {
     this.localNotifications.cancelAll().then(() => {
 
       this.localNotifications.schedule(this.notifications);
-      console.log("Modification de la notification");
+      console.log("Notification modified");
 
       this.notifications = [];
 
@@ -246,9 +245,9 @@ export class ClockPage {
 
   cancelAll() {
     this.localNotifications.cancelAll().then(() => {
-      this.toast.show('Alarm cancelled', '5000', 'center').subscribe(
+      this.toast.show('Alarm canceled', '5000', 'center').subscribe(
         toast => {
-          console.log("Alarme annulé");
+          console.log("Alarm canceled");
         }
       );
 
@@ -263,8 +262,6 @@ export class ClockPage {
     this.dataBase.selectSoundFromDataBase(userIs).then( data => {
       let lengthDB = data.rows.length;
         for (var i = 0; i < lengthDB; i++) {
-          console.log("this.son.name" + this.son.name);
-          console.log("data.rows.item(i).name" + data.rows.item(i).name);
           if (this.son.name ==  data.rows.item(i).name) {
             this.soundList.push({ name:  data.rows.item(i).name, used: true, src:  data.rows.item(i).src })
           }
@@ -288,4 +285,5 @@ export class ClockPage {
   addSound(){
     this.navCtrl.push(AddSoundPage);
   }
+  
 }
