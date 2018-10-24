@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { DatabaseProvider } from '../../providers/database/database';
 import { Toast } from '@ionic-native/toast';
 import { ClockPage } from '../clock/clock';
+import { Storage } from '@ionic/storage';
 
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 
