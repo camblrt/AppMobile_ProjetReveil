@@ -1,48 +1,51 @@
 <ion-header>
-  <ion-navbar>
-    <ion-title>
-      Réglage de l'Alarme
-    </ion-title>
-  </ion-navbar>
-</ion-header>
- 
-<ion-content>
- 
-    <ion-list no-lines>
- 
-        <ion-item>
-            <ion-input  type="text" value=""  placeholder="Nom de l'alarme" [(ngModel)]="nameAlarm"></ion-input>
-        </ion-item>
-        <ion-item>
-            <ion-input  type="text" value=""  placeholder="Description de l'alarme" [(ngModel)]="textAlarm"></ion-input>
-        </ion-item>
-        <ion-item>
-          <ion-label>Jour:</ion-label>
-          <ion-datetime displayFormat="h:mm A" pickerFormat="h mm A" [(ngModel)]="notifyTime"
-          display=left (ionChange)="timeChange($event)"></ion-datetime>
-        </ion-item>
- 
-       <ion-item *ngFor="let day of days">
-            <ion-label>{{day.title}}</ion-label>
-            <ion-checkbox [(ngModel)]="day.checked" color="primary"></ion-checkbox>
-        </ion-item>
-        <div><br>Choix du son :
-            <ion-input  type="text" value=""  placeholder="Name Sound" [(ngModel)]="nameSound"></ion-input>
-            
-        </div>
-        <ion-item *ngFor="let sound of soundList">
+    <ion-navbar>
+      <ion-title>
+        Réglage de l'Alarme
+      </ion-title>
+    </ion-navbar>
+  </ion-header>
+   
+  <ion-content>
+   
+      <ion-list no-lines>
+   
+          <ion-item>
+              <ion-input  type="text" value=""  placeholder="Nom de l'alarme" [(ngModel)]="nameAlarm"></ion-input>
+          </ion-item>
+          <ion-item>
+              <ion-input  type="text" value=""  placeholder="Description de l'alarme" [(ngModel)]="textAlarm"></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label>Jour:</ion-label>
+            <ion-datetime displayFormat="h:mm A" pickerFormat="h mm A" [(ngModel)]="notifyTime"
+            display=left (ionChange)="timeChange($event)"></ion-datetime>
+          </ion-item>
+   
+         <ion-item *ngFor="let day of days">
+              <ion-label>{{day.title}}</ion-label>
+              <ion-checkbox [(ngModel)]="day.checked" color="primary"></ion-checkbox>
+          </ion-item>
+          <div><br>Choix du son :</div>
+          <!-- <ion-item *ngFor="let sound of soundList">
+                  <ion-label>{{sound.name}}</ion-label>
+                  <ion-checkbox [(ngModel)]="sound.used"></ion-checkbox>
+          </ion-item> -->
+          
+          <ion-list  [(ngModel)]="sound_used" radio-group>
+            <ion-item *ngFor="let sound of soundList">
                 <ion-label>{{sound.name}}</ion-label>
-                <ion-checkbox [(ngModel)]="sound.used"></ion-checkbox>
-        </ion-item>
-        
-        
-    </ion-list>
- 
-</ion-content>
- 
-<ion-footer>
- 
-    <button (click)="createScheduleNotificationAndSaveClockValue()" ion-button round full color="orange" full>ADD ALARM</button>
-    <button (click)="cancelAll()" ion-button round full color="dark" full>CANCEL ALARM</button>
- 
-</ion-footer>
+                <ion-radio [value]="sound.name"></ion-radio>
+            </ion-item>
+        </ion-list>
+      </ion-list>
+   
+  </ion-content>
+   
+  <ion-footer>
+   
+      <button (click)="createScheduleNotificationAndSaveClockValue()" ion-button round full color="orange" full>ADD ALARM</button>
+      <button (click)="cancelAll()" ion-button round full color="dark" full>CANCEL ALARM</button>
+      <button (click)="addSound()" ion-button round full color="orange" full>ADD SOUND</button>
+   
+  </ion-footer>

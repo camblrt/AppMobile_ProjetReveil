@@ -1,3 +1,4 @@
+import { AddSoundPage } from './../add-sound/add-sound';
 import { NotificationOpenPage } from './../notification-open/notification-open';
 
 import { Toast } from '@ionic-native/toast';
@@ -39,6 +40,7 @@ export class ClockPage {
   chosenHours: number;
   chosenMinutes: number;
   notifyTime;
+  sound_used;
 
   son: { name: string, src: string, userIs: string };
   soundList = [];
@@ -163,7 +165,7 @@ export class ClockPage {
     }
     else {
       for (let sound of this.soundList) {
-        if (sound.used) {
+        if (sound.name == this.sound_used) {
           this.son.name = sound.name;
           this.son.src = sound.src;
         }
@@ -286,6 +288,9 @@ export class ClockPage {
     });
   }
 
+  addSound(){
+    this.navCtrl.push(AddSoundPage);
+  }
   onPause() {
     this.appInBackground = true;
     console.log("APP IN BACKGROUND");

@@ -1,3 +1,4 @@
+
 import { BrowserModule } from '@angular/platform-browser';
 import { ErrorHandler, NgModule } from '@angular/core';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
@@ -17,6 +18,7 @@ import { Brightness } from '@ionic-native/brightness';
 // import { HTTP } from '@ionic-native/http';
 import { BackgroundMode } from '@ionic-native/background-mode';
 
+import { AddSoundPage } from './../pages/add-sound/add-sound';
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
 import { RegisterPage } from '../pages/register/register';
@@ -36,7 +38,8 @@ import { ListUsersPage } from '../pages/list-users/list-users';
     ClockPage,
     NotificationOpenPage,
     ClockListPage,
-    ListUsersPage
+    ListUsersPage,
+    AddSoundPage
   ],
   imports: [
     BrowserModule,
@@ -52,7 +55,8 @@ import { ListUsersPage } from '../pages/list-users/list-users';
     RegisterPage,
     NotificationOpenPage,
     ClockListPage,
-    ListUsersPage
+    ListUsersPage,
+    AddSoundPage
   ],
   providers: [
     StatusBar,

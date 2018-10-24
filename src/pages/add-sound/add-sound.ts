@@ -37,4 +37,5 @@ export class AddSoundPage {
       this.navCtrl.setRoot(ClockPage);
     });
   }
+
 }
