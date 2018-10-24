@@ -43,6 +43,7 @@ export class ClockPage {
   son: { name: string, src: string, userIs: string };
   soundList = [];
   srcURL: string;
+  nameSound: string;
   appInBackground: boolean;
   public audioFile = new Audio();
 
@@ -280,7 +281,7 @@ export class ClockPage {
   insertNewSound(){
     this.storage.get('current_username').then((userIs) => {
       //Get Value + insert
-      //this.dataBase.insertNewSoundInDataBase(name,src,userIs);
+      this.dataBase.insertNewSoundInDataBase(this.nameSound,this.srcURL,userIs);
       this.getAndDisplaySound(userIs);
     });
   }

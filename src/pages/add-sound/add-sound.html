@@ -1,0 +1,20 @@
+<ion-header>
+  <ion-navbar>
+      <ion-title>
+          New Sound
+      </ion-title>
+  </ion-navbar>
+</ion-header>
+<ion-content padding></ion-content>
+    <form [formGroup]="registerSound" (ngSubmit)="register()">
+        <ion-item>
+        <ion-label>Name:</ion-label>
+        <ion-input name="Name" type="text" [(ngModel)]="name" formControlName="login"></ion-input>
+        </ion-item>
+        <ion-item>
+        <ion-label>Source (url link):</ion-label>
+        <ion-input name="Source" type="text" [(ngModel)]="source" formControlName="password"></ion-input>
+        </ion-item>
+        <button ion-button round full color="orange" class="button-app" type="submit" [disabled]="!registerUser.valid">Submit</button>
+    </form>
+</ion-content>
