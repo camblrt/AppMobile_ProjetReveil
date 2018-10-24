@@ -27,10 +27,17 @@
             <ion-checkbox [(ngModel)]="day.checked" color="primary"></ion-checkbox>
         </ion-item>
         <div><br>Choix du son :<ion-input  type="text" value=""  placeholder="Source URL" [(ngModel)]="srcURL"></ion-input></div>
-        <ion-item *ngFor="let sound of soundList">
+        <!-- <ion-item *ngFor="let sound of soundList">
                 <ion-label>{{sound.name}}</ion-label>
                 <ion-checkbox [(ngModel)]="sound.used"></ion-checkbox>
-        </ion-item>
+        </ion-item> -->
+
+        <ion-list [(ngModel)]="sound_used" radio-group>
+            <ion-item *ngFor="let sound of soundList">
+                <ion-label>{{sound.name}}</ion-label>
+                <ion-radio [value]="sound.name"></ion-radio>
+            </ion-item>
+        </ion-list>
         
         
     </ion-list>

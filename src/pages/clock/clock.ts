@@ -8,6 +8,8 @@ import * as moment from 'moment';
 import { Storage } from '@ionic/storage';
 import { DatabaseProvider } from './../../providers/database/database';
 import { File } from '@ionic-native/file';
+import { FormControl, Validators, FormBuilder, FormGroup, ValidatorFn, AbstractControl } from '@angular/forms';
+
 
 import { HomePage } from '../home/home';
 import { Brightness } from '@ionic-native/brightness';
@@ -39,6 +41,7 @@ export class ClockPage {
   chosenHours: number;
   chosenMinutes: number;
   notifyTime;
+  sound_used;
 
   son: { name: string, src: string };
   soundList = [];
@@ -67,7 +70,9 @@ export class ClockPage {
     public dataBase: DatabaseProvider,
     private brightness: Brightness,
     private file: File,
-    private backgroundMode: BackgroundMode) {
+    private backgroundMode: BackgroundMode,
+    private formBuilder: FormBuilder) {
+      
 
       // this.subcriber.unsubscribe();
 
@@ -171,16 +176,17 @@ export class ClockPage {
     let currentDate = new Date();
     let currentDay = currentDate.getDay(); // Sunday = 0, Monday = 1, etc.
     this.dayDB = "";
-
+   console.log(this.sound_used);
     if (this.srcURL != null) {
       this.son.name = "Private URL";
       this.son.src = this.srcURL;
     }
     else {
       for (let sound of this.soundList) {
-        if (sound.used) {
+        if (sound.name == this.sound_used) {
           this.son.name = sound.name;
           this.son.src = sound.src;
+          console.log(this.son.src);
         }
       }
     }
