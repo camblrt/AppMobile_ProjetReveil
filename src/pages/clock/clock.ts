@@ -7,7 +7,6 @@ import { LocalNotifications } from '@ionic-native/local-notifications';
 import * as moment from 'moment';
 import { Storage } from '@ionic/storage';
 import { DatabaseProvider } from './../../providers/database/database';
-import { File } from '@ionic-native/file';
 
 import { HomePage } from '../home/home';
 import { Brightness } from '@ionic-native/brightness';
@@ -67,7 +66,6 @@ export class ClockPage {
     private storage: Storage,
     public dataBase: DatabaseProvider,
     private brightness: Brightness,
-    private file: File,
     private backgroundMode: BackgroundMode) {
 
       // this.subcriber.unsubscribe();
@@ -205,9 +203,6 @@ export class ClockPage {
   }
 
   scheduleLocalNotification() {
-    document.addEventListener("pause", this.onPause, false);
-    document.addEventListener("resume", this.onResume, false);
-
     // Cancel any existing notifications
     this.localNotifications.cancelAll().then(() => {
 
@@ -266,6 +261,8 @@ export class ClockPage {
     this.dataBase.selectSoundFromDataBase(userIs).then( data => {
       let lengthDB = data.rows.length;
         for (var i = 0; i < lengthDB; i++) {
+          console.log("this.son.name" + this.son.name);
+          console.log("data.rows.item(i).name" + data.rows.item(i).name);
           if (this.son.name ==  data.rows.item(i).name) {
             this.soundList.push({ name:  data.rows.item(i).name, used: true, src:  data.rows.item(i).src })
           }
@@ -284,15 +281,5 @@ export class ClockPage {
       //this.dataBase.insertNewSoundInDataBase(name,src,userIs);
       this.getAndDisplaySound(userIs);
     });
-  }
-
-  onPause() {
-    this.appInBackground = true;
-    console.log("APP IN BACKGROUND");
-  }
-
-  onResume() {
-    this.appInBackground = false;
-    console.log("APP IN FOREGROUND");
   }
 }
