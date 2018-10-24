@@ -13,6 +13,8 @@ import { HomePage } from '../home/home';
 import { Brightness } from '@ionic-native/brightness';
 import { BackgroundMode } from '@ionic-native/background-mode';
 
+import { Subscription } from 'rxjs/Subscription';
+
 
 
 /**
@@ -28,7 +30,7 @@ import { BackgroundMode } from '@ionic-native/background-mode';
   templateUrl: 'clock.html',
 })
 export class ClockPage {
-  
+
   nameAlarm: string;
   textAlarm: string;
   notifications: any[] = [];
@@ -38,12 +40,13 @@ export class ClockPage {
   chosenMinutes: number;
   notifyTime;
 
-  son: {name: string, src: string};
+  son: { name: string, src: string };
   soundList = [];
   srcURL: string;
   appInBackground: boolean;
-  public audioFile = new Audio(); 
+  public audioFile = new Audio();
 
+  subcriber: Subscription = new Subscription();
 
   constructor(private toast: Toast,
     public localNotifications: LocalNotifications,
@@ -54,10 +57,10 @@ export class ClockPage {
     private storage: Storage,
     public dataBase: DatabaseProvider,
     private brightness: Brightness,
-    private file : File,
+    private file: File,
     private backgroundMode: BackgroundMode) {
 
-    this.son = {name: "", src: ""};
+    this.son = { name: "", src: "" };
     this.days = [
       { title: 'Lundi', dayCode: 1, checked: false },
       { title: 'Mardi', dayCode: 2, checked: false },
@@ -92,20 +95,22 @@ export class ClockPage {
     });
   }
 
-  getSoundJSON(){
+  getSoundJSON() {
     this.file.readAsText(this.file.applicationDirectory + "www/assets", "sons.json").then(data => {
       let jsonSon = JSON.parse(data)
-      for(let sound of jsonSon){
-        if(this.son.name == sound.name){
-          this.soundList.push({name : sound.name, used: true, src: sound.src})
+      for (let sound of jsonSon) {
+        if (this.son.name == sound.name) {
+          this.soundList.push({ name: sound.name, used: true, src: sound.src })
         }
-        else{
-          this.soundList.push({name : sound.name, used: false, src: sound.src})
-        }      }
+        else {
+          this.soundList.push({ name: sound.name, used: false, src: sound.src })
+        }
+      }
+      console.log(this.soundList);
     })
-    .catch(err => {
-      console.log(err);
-    })
+      .catch(err => {
+        console.log(err);
+      })
   }
 
   ionViewDidLoad() {
@@ -118,6 +123,9 @@ export class ClockPage {
         });
       }
     });
+
+    // this.subcriber.unsubscribe;
+    // console.log("unsubscribe");
   }
 
   dbTOpagesDays(dayDB) {
@@ -153,6 +161,19 @@ export class ClockPage {
     let currentDate = new Date();
     let currentDay = currentDate.getDay(); // Sunday = 0, Monday = 1, etc.
     this.dayDB = "";
+   
+    if (this.srcURL != null) {
+      this.son.name = "Private URL";
+      this.son.src = this.srcURL;
+    }
+    else {
+      for (let sound of this.soundList) {
+        if (sound.used) {
+          this.son.name = sound.name;
+          this.son.src = sound.src;
+        }
+      }
+    }
     for (let day of this.days) {
       if (day.checked) {
         let firstNotificationTime = new Date();
@@ -169,7 +190,6 @@ export class ClockPage {
 
         //to test easily
         firstNotificationTime = new Date(new Date().getTime() + 6000);
-
         let notification = {
           id: 1,
           title: this.nameAlarm,
@@ -181,28 +201,28 @@ export class ClockPage {
             //count: 10000
           },
           smallIcon: 'res//assets/imgs/logo.png',
-          sound: null,
+          sound: this.son.src,
           icon: 'https://d1nhio0ox7pgb.cloudfront.net/_img/g_collection_png/standard/256x256/pumpkin_halloween.png',
         };
         this.notifications.push(notification);
       }
     }
-    if(this.srcURL != null){
-      this.son.name = "Private URL";
-      this.son.src = this.srcURL;
-    }
-    else{
-      for (let sound of this.soundList) {
-        if(sound.used){
-          this.son.name = sound.name;
-          this.son.src = sound.src;
-        }
-      }
-    }
   }
 
   async delay(ms: number) {
-    return new Promise( resolve => setTimeout(resolve, ms) );
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+
+  subscribeSoundNotification(){
+
+    this.backgroundMode.wakeUp();
+
+    for (var brightnessValue = 0.0; brightnessValue < 1.0; brightnessValue += 0.1) {
+      this.delay(10000);
+      this.brightness.setBrightness(brightnessValue);
+    }
+    this.navCtrl.setRoot(HomePage);
+            this.navCtrl.push(NotificationOpenPage);
   }
 
   scheduleLocalNotification() {
@@ -211,40 +231,16 @@ export class ClockPage {
 
     // Cancel any existing notifications
     this.localNotifications.cancelAll().then(() => {
-      
+
       this.localNotifications.schedule(this.notifications);
-      console.log("Modification de la notification");
+        console.log("Modification de la notification");
 
-      if (this.appInBackground) {
-        this.localNotifications.on('click').subscribe(() => {
-          this.navCtrl.setRoot(HomePage);
-          this.navCtrl.push(NotificationOpenPage);
-        });
-      }
-      else {
-        this.localNotifications.on('trigger').subscribe(() => {
-          console.log("Notification");
-          this.navCtrl.setRoot(HomePage);
-          this.navCtrl.push(NotificationOpenPage);
-        });
-      }
+        this.localNotifications.on('trigger').subscribe(() => this.subscribeSoundNotification());
 
-      this.localNotifications.on('trigger').subscribe(() => {
-        this.audioFile.src = this.son.src;
-        this.audioFile.load();
-        this.audioFile.play();
-
-        this.backgroundMode.wakeUp();
-
-        for(var brightnessValue=0.0; brightnessValue<1.0; brightnessValue+=0.1){
-          this.delay(10000);
-          this.brightness.setBrightness(brightnessValue);
-        }
-
+        this.notifications = [];
       });
 
-      this.notifications = [];
-    });
+
   }
 
   updateClockTableInDataBase() {
@@ -282,11 +278,11 @@ export class ClockPage {
           console.log("Alarme annulé");
         }
       );
-  
+
       this.audioFile.src = 'http://www.slspencer.com/Sounds/Halloween/Cave.wav';
       this.audioFile.load();
       this.audioFile.play();
-      }
+    }
     )
   }
 

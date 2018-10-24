@@ -54,7 +54,7 @@ export class NotificationOpenPage {
       (error) => {
         
         let alert = this.alertCtrl.create({
-          title: error.message,
+          title: "No internet connection",
           buttons: ['OK']
         });
         console.log("Error from getWeatherFromPosition(): " + error.message);
@@ -109,6 +109,11 @@ export class NotificationOpenPage {
       })
         .catch((error) => {
           console.log('Error from getCurrentPosition(): ', error.message);
+          let alert = this.alertCtrl.create({
+            title: "Can't access to your position",
+            buttons: ['OK']
+          });
+          alert.present();
         });
     })
       .catch((error) => {
