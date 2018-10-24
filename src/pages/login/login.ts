@@ -16,8 +16,6 @@ import { DatabaseProvider } from '../../providers/database/database';
 export class LoginPage {
   login: string;
   password: string;
-  readonly APP_LOGIN: string = 'Camille';
-  readonly APP_PASSWORD: string = 'cpe';
 
   usernameFromDB: string;
   passwordFromDB: string;
@@ -28,8 +26,8 @@ export class LoginPage {
 
   async connexion() {
     let alert = this.alertCtrl.create({
-      title: 'Connexion refusée',
-      subTitle: 'Le mot et de passe et/ou le login ne sont pas valides',
+      title: 'Connexion refused',
+      subTitle: 'The password and/or login are not correct',
       buttons: ['OK']
     });
     

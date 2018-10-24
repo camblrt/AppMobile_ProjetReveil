@@ -1,22 +1,22 @@
 <ion-header>
     <ion-navbar>
         <ion-title>
-            Connexion
+            Sign-in
         </ion-title>
     </ion-navbar>
 </ion-header>
 <ion-content padding>
-  <h3>Connectez-vous:</h3>
+  <h3>Sign-in:</h3>
   <form #loginForm="ngForm" (ngSubmit)="connexion()" autocomplete="off">
       <ion-row>
           <ion-col>
               <ion-list inset>
               <ion-item>
-                  <ion-input placeholder="Email" name="username" id="loginField"
+                  <ion-input placeholder="UserName" name="username" id="loginField"
                                required type="text" [(ngModel)]="login" #email></ion-input>
               </ion-item>
               <ion-item>
-                  <ion-input placeholder="Mot de passe" name="password" id="passwordField"
+                  <ion-input placeholder="Password" name="password" id="passwordField"
                               type="password" required [(ngModel)]="password"></ion-input>
               </ion-item>
               </ion-list>
@@ -26,7 +26,7 @@
           <ion-col>
               <div *ngIf="error" class="alert alert-danger">{{error}}</div>
               <button ion-button class="submit-btn" full type="submit"
-                      [disabled]="!loginForm.form.valid" >Connexion
+                      [disabled]="!loginForm.form.valid" >Sign-in
               </button>
           </ion-col>
       </ion-row>

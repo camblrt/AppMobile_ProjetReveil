@@ -6,21 +6,21 @@
 -->
 <ion-header>
   <ion-navbar>
-    <ion-title>La météo pres de chez vous:</ion-title>
+    <ion-title>Weather and News next to you:</ion-title>
   </ion-navbar>
 </ion-header>
 <ion-content padding>
   <ion-card color="light">
     <ion-card-content>
-      <h1>A {{name}}</h1>
-      <h2>Le temps est {{meteo}} et il fait {{temperature}}°C aujourd'hui.</h2>
+      <h1>In {{name}}</h1>
+      <h2>The weather is {{meteo}} and the current temperature is {{temperature}}°C</h2>
       <img [src]="icone_meteo" />
       <h3>Bonne journée!</h3>
     </ion-card-content>
   </ion-card>
   <ion-card color="light">
     <ion-card-content>
-      <h1>L'actualité du jour: </h1>
+      <h1>Today News: </h1>
       <div class="actu-title" *ngFor="let actu of actualites; let i = index" [attr.data-index]="i">
         <h2 (click)="actuSelected(actu)"> <div class="inner-item">• {{actu.title}} </div></h2>
       </div>

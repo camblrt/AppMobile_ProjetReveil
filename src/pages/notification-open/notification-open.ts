@@ -39,7 +39,7 @@ export class NotificationOpenPage {
 
     this.url = "http://api.openweathermap.org/data/2.5/weather?lat="
       + this.latitude + "&lon="
-      + this.longitude + "&appid=68a40fffe840bac1f3463b4c9a130473&lang=fr&units=metric";
+      + this.longitude + "&appid=68a40fffe840bac1f3463b4c9a130473&lang=en&units=metric";
 
     this.http.get(this.url).subscribe((data: any) => {
       this.temperature = data.main.temp;

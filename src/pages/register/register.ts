@@ -54,9 +54,9 @@ export class RegisterPage {
       this.navCtrl.setRoot(HomePage);
     }
     else {
-      this.toast.show('Les deux mots de passe doivent être identiques', '5000', 'center').subscribe(
+      this.toast.show('Both password must be equal', '5000', 'center').subscribe(
         toast => {
-          console.log('Les deux mots de passe doivent être identiques');
+          console.log('Both password must be equal');
         }
       );
     }
