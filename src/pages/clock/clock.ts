@@ -46,7 +46,16 @@ export class ClockPage {
   appInBackground: boolean;
   public audioFile = new Audio();
 
-  subcriber: Subscription = new Subscription();
+  subcriber: Subscription = this.localNotifications.on('trigger').subscribe(() => {
+    this.backgroundMode.wakeUp();
+
+    for (var brightnessValue = 0.0; brightnessValue < 1.0; brightnessValue += 0.1) {
+      this.delay(10000);
+      this.brightness.setBrightness(brightnessValue);
+    }
+    this.navCtrl.setRoot(HomePage);
+    this.navCtrl.push(NotificationOpenPage);
+  });
 
   constructor(private toast: Toast,
     public localNotifications: LocalNotifications,
@@ -59,6 +68,8 @@ export class ClockPage {
     private brightness: Brightness,
     private file: File,
     private backgroundMode: BackgroundMode) {
+
+      // this.subcriber.unsubscribe();
 
     this.son = { name: "", src: "" };
     this.days = [
@@ -93,6 +104,8 @@ export class ClockPage {
           console.log("Error from selectClockForUserInDB(): " + error.message);
         });
     });
+
+
   }
 
   getSoundJSON() {
@@ -123,9 +136,6 @@ export class ClockPage {
         });
       }
     });
-
-    // this.subcriber.unsubscribe;
-    // console.log("unsubscribe");
   }
 
   dbTOpagesDays(dayDB) {
@@ -161,7 +171,7 @@ export class ClockPage {
     let currentDate = new Date();
     let currentDay = currentDate.getDay(); // Sunday = 0, Monday = 1, etc.
     this.dayDB = "";
-   
+
     if (this.srcURL != null) {
       this.son.name = "Private URL";
       this.son.src = this.srcURL;
@@ -213,17 +223,6 @@ export class ClockPage {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
 
-  subscribeSoundNotification(){
-
-    this.backgroundMode.wakeUp();
-
-    for (var brightnessValue = 0.0; brightnessValue < 1.0; brightnessValue += 0.1) {
-      this.delay(10000);
-      this.brightness.setBrightness(brightnessValue);
-    }
-    this.navCtrl.setRoot(HomePage);
-            this.navCtrl.push(NotificationOpenPage);
-  }
 
   scheduleLocalNotification() {
     document.addEventListener("pause", this.onPause, false);
@@ -233,12 +232,12 @@ export class ClockPage {
     this.localNotifications.cancelAll().then(() => {
 
       this.localNotifications.schedule(this.notifications);
-        console.log("Modification de la notification");
+      console.log("Modification de la notification");
 
-        this.localNotifications.on('trigger').subscribe(() => this.subscribeSoundNotification());
 
-        this.notifications = [];
-      });
+      this.notifications = [];
+
+    });
 
 
   }
