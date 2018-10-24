@@ -25,11 +25,14 @@ export class DatabaseProvider {
       location: 'default'
     });
     this.db.executeSql('CREATE TABLE IF NOT EXISTS user (login TEXT PRIMARY KEY, password TEXT)', [])
-      .then(res => console.log(res))
+      .then(res => console.log("CREATE TABLE user" + (res)))
       .catch(error => console.log("Error from executeSql(CREATE USER TABLE): " + error.message));
     this.db.executeSql('CREATE TABLE IF NOT EXISTS clock (nom TEXT, text TEXT, heure INT, minute INT, jour TEXT, son TEXT, user TEXT PRIMARY KEY)', [])
-      .then(res => console.log(res))
+      .then(res => console.log("CREATE TABLE clock" + res))
       .catch(error => console.log("Error from executeSql(CREATE CLOCK TABLE): " + error));
+    this.db.executeSql('CREATE TABLE IF NOT EXISTS sound (name TEXT, src TEXT PRIMARY KEY, user TEXT)', [])
+      .then(res => console.log("CREATE TABLE sound" + res))
+      .catch(error => console.log("Error from executeSql(CREATE SOUND TABLE): " + error));
     return;
   }
 
@@ -40,6 +43,8 @@ export class DatabaseProvider {
       .then(res => {
         this.toast.show('User registered', '5000', 'center');
         this.insertNewClockInDataBase("Nouvelle Alarme", "Il est l'heure!", 0, 0, "Lundi Jeudi", "Nouveau Son", username);
+        this.insertNewSoundInDataBase("BoomBoomBoom","http://egeland.net/pub/ringtones/BoomBoomBoom.mp3",username);
+        this.insertNewSoundInDataBase("Gentle","http://egeland.net/pub/ringtones/Gentle.mp3",username);
       }).catch(error => {
         console.log("Error from executeSql(INSERT INTO user): " + error.message);
       });
@@ -102,5 +107,23 @@ export class DatabaseProvider {
     await this.dbReady;
 
     return this.db.executeSql('UPDATE clock SET nom=?, text=?, heure=?,minute=?,jour=?,son=? WHERE user=?', [clockNom, clockText, heure, minute, jour, son, user])
+  }
+
+
+  async insertNewSoundInDataBase(name: String, src: String, user: String) {
+    await this.dbReady;
+
+    return this.db.executeSql('INSERT INTO sound VALUES(?,?,?)', [name, src, user])
+      .then(res => {
+        this.toast.show('Sound registered', '5000', 'center');
+        console.log("Sound inserer dans db : " + name + "  user  " + user)
+      }).catch(error => {
+        console.log("Error from executeSql(INSERT INTO sound): " + error.message);
+      });
+  }
+
+  async selectSoundFromDataBase(user: String) {
+    await this.dbReady;
+    return this.db.executeSql('select * from sound where user=?', [user]);
   }
 }
