@@ -1,29 +1,29 @@
 <ion-header>
   <ion-navbar>
       <ion-title>
-          Nouvel utilisateur
+          New User
       </ion-title>
   </ion-navbar>
 </ion-header>
 <ion-content padding>
-    <h3>Enregistrez-vous:</h3>
+    <h3>Register now:</h3>
 
     <form [formGroup]="registerUser" (ngSubmit)="register()">
         <ion-item>
-        <ion-label>Nom d'utilisateur</ion-label>
+        <ion-label>Username</ion-label>
         <ion-input name="username" type="text" [(ngModel)]="login" formControlName="login"></ion-input>
         </ion-item>
         <ion-item>
-        <ion-label>Mot de passe</ion-label>
+        <ion-label>Password</ion-label>
         <ion-input name="password" type="password" [(ngModel)]="password" formControlName="password"></ion-input>
         </ion-item>
         <ion-item>
-            <ion-label>Confirmer le mot de passe</ion-label>
+            <ion-label>Confirm password</ion-label>
             <ion-input name="confirmPassword" type="password" [(ngModel)]="confirmPassword" formControlName="confirmPassword"></ion-input>
         </ion-item>
         <ion-item no-lines *ngIf="registerUser.get('confirmPassword').hasError('equalTo')">
             <div class="error" *ngIf="registerUser.get('confirmPassword').hasError('equalTo')">
-                Mot de passe différents
+                Different Password
             </div>
         </ion-item>
         <button ion-button round full color="orange" class="button-app" type="submit" [disabled]="!registerUser.valid">Submit</button>
