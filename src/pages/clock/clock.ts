@@ -40,7 +40,7 @@ export class ClockPage {
   chosenMinutes: number;
   notifyTime;
 
-  son: { name: string, src: string };
+  son: { name: string, src: string, userIs: string };
   soundList = [];
   srcURL: string;
   appInBackground: boolean;
@@ -71,7 +71,7 @@ export class ClockPage {
 
       // this.subcriber.unsubscribe();
 
-    this.son = { name: "", src: "" };
+    this.son = { name: "", src: "", userIs: "" };
     this.days = [
       { title: 'Lundi', dayCode: 1, checked: false },
       { title: 'Mardi', dayCode: 2, checked: false },
@@ -93,21 +93,8 @@ export class ClockPage {
           this.dayDB = data.rows.item(i).jour;
           this.son.name = data.rows.item(i).son;
         }
-        
-        this.dataBase.selectSoundFromDataBase(userIs).then( data => {
-          let lengthDB = data.rows.length;
-            for (var i = 0; i < lengthDB; i++) {
-              if (this.son.name ==  data.rows.item(i).name) {
-                this.soundList.push({ name:  data.rows.item(i).name, used: true, src:  data.rows.item(i).src })
-              }
-              else {
-                this.soundList.push({ name:  data.rows.item(i).name, used: false, src:  data.rows.item(i).src })
-              }
-            }
-        })
-        .catch(error => {
-          console.log("Error from selectSoundForUserInDB(): " + error.message);
-        });
+
+        this.getAndDisplaySound(userIs);
 
         var today = new Date();
         this.notifyTime = moment(new Date(today.getFullYear(), today.getMonth(), today.getDate(), this.chosenHours, this.chosenMinutes, 0)).format();
@@ -158,6 +145,10 @@ export class ClockPage {
   timeChange(time) {
     this.chosenHours = time.hour;
     this.chosenMinutes = time.minute;
+  }
+
+  async delay(ms: number) {
+    return new Promise(resolve => setTimeout(resolve, ms));
   }
 
   getClockValueAndCreateNewNotification() {
@@ -212,11 +203,6 @@ export class ClockPage {
     }
   }
 
-  async delay(ms: number) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-  }
-
-
   scheduleLocalNotification() {
     document.addEventListener("pause", this.onPause, false);
     document.addEventListener("resume", this.onResume, false);
@@ -226,7 +212,6 @@ export class ClockPage {
 
       this.localNotifications.schedule(this.notifications);
       console.log("Modification de la notification");
-
 
       this.notifications = [];
 
@@ -246,8 +231,6 @@ export class ClockPage {
         });
     });
   }
-
-
 
   createScheduleNotificationAndSaveClockValue() {
 
@@ -276,6 +259,30 @@ export class ClockPage {
       this.audioFile.play();
     }
     )
+  }
+
+  getAndDisplaySound(userIs: string){
+    this.dataBase.selectSoundFromDataBase(userIs).then( data => {
+      let lengthDB = data.rows.length;
+        for (var i = 0; i < lengthDB; i++) {
+          if (this.son.name ==  data.rows.item(i).name) {
+            this.soundList.push({ name:  data.rows.item(i).name, used: true, src:  data.rows.item(i).src })
+          }
+          else {
+            this.soundList.push({ name:  data.rows.item(i).name, used: false, src:  data.rows.item(i).src })
+          }
+        }
+    })
+    .catch(error => {
+      console.log("Error from selectSoundForUserInDB(): " + error.message);
+    });
+  }
+  insertNewSound(){
+    this.storage.get('current_username').then((userIs) => {
+      //Get Value + insert
+      //this.dataBase.insertNewSoundInDataBase(name,src,userIs);
+      this.getAndDisplaySound(userIs);
+    });
   }
 
   onPause() {
