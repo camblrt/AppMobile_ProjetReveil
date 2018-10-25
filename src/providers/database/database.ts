@@ -29,10 +29,10 @@ export class DatabaseProvider {
       .catch(error => console.log("Error from executeSql(CREATE USER TABLE): " + error.message));
     this.db.executeSql('CREATE TABLE IF NOT EXISTS clock (nom TEXT, text TEXT, heure INT, minute INT, jour TEXT, son TEXT, user TEXT PRIMARY KEY)', [])
       .then(res => console.log("CREATE TABLE clock" + res))
-      .catch(error => console.log("Error from executeSql(CREATE CLOCK TABLE): " + error));
-    this.db.executeSql('CREATE TABLE IF NOT EXISTS sound (name TEXT, src TEXT PRIMARY KEY, user TEXT)', [])
+      .catch(error => console.log("Error from executeSql(CREATE CLOCK TABLE): " + error.message));
+    this.db.executeSql('CREATE TABLE IF NOT EXISTS sound (ID INT PRIMARY KEY, name TEXT, src TEXT, user TEXT)', [])
       .then(res => console.log("CREATE TABLE sound" + res))
-      .catch(error => console.log("Error from executeSql(CREATE SOUND TABLE): " + error));
+      .catch(error => console.log("Error from executeSql(CREATE SOUND TABLE): " + error.message));
     return;
   }
 
@@ -113,7 +113,7 @@ export class DatabaseProvider {
   async insertNewSoundInDataBase(name: String, src: String, user: String) {
     await this.dbReady;
 
-    return this.db.executeSql('INSERT INTO sound VALUES(?,?,?)', [name, src, user])
+    return this.db.executeSql('INSERT INTO sound VALUES(?,?,?,?)', [,name, src, user])
       .then(res => {
         this.toast.show('Sound registered', '5000', 'center');
         console.log("Sound insert in db : " + name + "  user  " + user)

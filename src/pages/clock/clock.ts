@@ -13,7 +13,6 @@ import { HomePage } from '../home/home';
 import { Brightness } from '@ionic-native/brightness';
 import { BackgroundMode } from '@ionic-native/background-mode';
 
-import { Subscription } from 'rxjs/Subscription';
 
 
 
@@ -47,17 +46,6 @@ export class ClockPage {
   nameSound: string;
   appInBackground: boolean;
   public audioFile = new Audio();
-
-  subcriber: Subscription = this.localNotifications.on('trigger').subscribe(() => {
-    this.backgroundMode.wakeUp();
-
-    for (var brightnessValue = 0.0; brightnessValue < 1.0; brightnessValue += 0.1) {
-      this.delay(10000);
-      this.brightness.setBrightness(brightnessValue);
-    }
-    this.navCtrl.setRoot(HomePage);
-    this.navCtrl.push(NotificationOpenPage);
-  });
 
   constructor(private toast: Toast,
     public localNotifications: LocalNotifications,
@@ -209,7 +197,27 @@ export class ClockPage {
 
       this.localNotifications.schedule(this.notifications);
       console.log("Notification modified");
+      this.localNotifications.on('trigger').subscribe(() => {
+        this.backgroundMode.wakeUp();
+    
+        for (var brightnessValue = 0.0; brightnessValue < 1.0; brightnessValue += 0.1) {
+          this.delay(10000);
+          this.brightness.setBrightness(brightnessValue);
+        }
+        this.navCtrl.setRoot(HomePage);
+        this.navCtrl.push(NotificationOpenPage);
+      });
 
+      this.localNotifications.on('click').subscribe(() => {
+        this.backgroundMode.wakeUp();
+    
+        for (var brightnessValue = 0.0; brightnessValue < 1.0; brightnessValue += 0.1) {
+          this.delay(10000);
+          this.brightness.setBrightness(brightnessValue);
+        }
+        this.navCtrl.setRoot(HomePage);
+        this.navCtrl.push(NotificationOpenPage);
+      });
       this.notifications = [];
 
     });

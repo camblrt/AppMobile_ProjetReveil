@@ -50,6 +50,16 @@ export class ListUsersPage {
 
   userSelected(user: string) {
     this.storage.set('current_username', user);
+    this.databaseUser.selectClockForUserInDB(user).then(data => {
+      let lengthDB = data.rows.length;
+      for (var i = 0; i < lengthDB; i++) {
+        let nameAlarm = data.rows.item(i).nom;
+        let chosenHours = data.rows.item(i).heure;
+        let chosenMinutes = data.rows.item(i).minute;
+        let dayDB = data.rows.item(i).jour;
+        this.storage.set('clock', [nameAlarm, chosenHours, chosenMinutes, dayDB]);
+      }
+    });
     this.navCtrl.setRoot(HomePage);
   }
 
