@@ -29,7 +29,7 @@ export class AddSoundPage {
   }
 
 
-  register() {
+  registerSound() {
     this.storage.get('current_username').then((userIs) => {
       this.databaseUser.insertNewSoundInDataBase(this.name, this.source, userIs);
       this.toast.show('Sound Added', '5000', 'center').subscribe(
