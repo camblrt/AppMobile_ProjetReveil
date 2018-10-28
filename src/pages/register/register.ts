@@ -61,21 +61,5 @@ export class RegisterPage {
       );
     }
   }
-
-  async getFromDB() {
-    var dataUserInDB = [{ login: "", password: "" }];
-    var lengthDB;
-    await this.databaseUser.selectUserFromDataBase().then(data => {
-      lengthDB = data.rows.length;
-      for (var i = 0; i < lengthDB; i++) {
-        dataUserInDB[i].login = data.rows.item(i).login;
-        dataUserInDB[i].password = data.rows.item(i).password;
-        console.log("User " + i + " : " + dataUserInDB[i].login + " and password is: " + dataUserInDB[i].password);
-      }
-    })
-      .catch(error => {
-        console.log("Error from getFromDB(): " + error.message);
-      });
-  }
 }
 
