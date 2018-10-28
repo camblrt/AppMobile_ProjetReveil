@@ -152,8 +152,10 @@ export class ClockPage {
         firstNotificationTime.setMinutes(this.chosenMinutes);
         firstNotificationTime.setSeconds(0);
 
-        firstNotificationTime = new Date(new Date().getTime() + 6000);
+        // TO TEST EASILY
+        //firstNotificationTime = new Date(new Date().getTime() + 6000);
 
+        //notificaiton lié à la récurence
         let notificationRecurence = {
           id: 1,
           title: this.nameAlarm,
@@ -168,6 +170,8 @@ export class ClockPage {
           sound: this.son.src,
           icon: 'https://d1nhio0ox7pgb.cloudfront.net/_img/g_collection_png/standard/256x256/pumpkin_halloween.png',
         };
+
+        //notification lié au premier event de la récurence
         this.notifications.push(notificationRecurence);
         let notification = {
           id: 1,
@@ -175,9 +179,6 @@ export class ClockPage {
           text: this.textAlarm,
           trigger: {
             at: firstNotificationTime
-            //every: ELocalNotificationTriggerUnit.DAY,
-            //Besoin de count 1000 sinon notifications sonne en boucle
-            //count: 5
           },
           smallIcon: 'res//assets/imgs/logo.png',
           sound: this.son.src,
@@ -200,8 +201,8 @@ export class ClockPage {
       this.localNotifications.on('trigger').subscribe(() => {
         this.backgroundMode.wakeUp();
     
-        for (var brightnessValue = 0.0; brightnessValue < 1.0; brightnessValue += 0.05) {
-          this.delay(10000);
+        for (var brightnessValue = 0.0; brightnessValue < 1.0; brightnessValue += 0.1) {
+          this.delay(5000000);
           this.brightness.setBrightness(brightnessValue);
         }
         this.navCtrl.setRoot(HomePage);
@@ -211,8 +212,8 @@ export class ClockPage {
       this.localNotifications.on('click').subscribe(() => {
         this.backgroundMode.wakeUp();
     
-        for (var brightnessValue = 0.0; brightnessValue < 1.0; brightnessValue += 0.05) {
-          this.delay(10000);
+        for (var brightnessValue = 0.0; brightnessValue < 1.0; brightnessValue += 0.1) {
+          this.delay(5000000);
           this.brightness.setBrightness(brightnessValue);
         }
         this.navCtrl.setRoot(HomePage);
