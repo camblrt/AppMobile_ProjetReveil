@@ -3,8 +3,8 @@ import { NotificationOpenPage } from './../notification-open/notification-open';
 
 import { Toast } from '@ionic-native/toast';
 import { Component } from '@angular/core';
-import { NavController, NavParams, Platform, AlertController } from 'ionic-angular';
-import { LocalNotifications } from '@ionic-native/local-notifications';
+import { NavController, NavParams, Platform} from 'ionic-angular';
+import { LocalNotifications, ELocalNotificationTriggerUnit } from '@ionic-native/local-notifications';
 import * as moment from 'moment';
 import { Storage } from '@ionic/storage';
 import { DatabaseProvider } from './../../providers/database/database';
@@ -12,16 +12,6 @@ import { DatabaseProvider } from './../../providers/database/database';
 import { HomePage } from '../home/home';
 import { Brightness } from '@ionic-native/brightness';
 import { BackgroundMode } from '@ionic-native/background-mode';
-
-
-
-
-/**
- * Generated class for the ClockPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
 
 
 @Component({
@@ -38,13 +28,10 @@ export class ClockPage {
   chosenHours: number;
   chosenMinutes: number;
   notifyTime;
-  sound_used;
 
+  sound_used;
   son: { name: string, src: string, userIs: string };
   soundList = [];
-  srcURL: string;
-  nameSound: string;
-  appInBackground: boolean;
   public audioFile = new Audio();
 
   constructor(private toast: Toast,
@@ -52,7 +39,6 @@ export class ClockPage {
     public navCtrl: NavController,
     public navParams: NavParams,
     public platform: Platform,
-    public alertCtrl: AlertController,
     private storage: Storage,
     public dataBase: DatabaseProvider,
     private brightness: Brightness,
@@ -144,21 +130,17 @@ export class ClockPage {
     let currentDay = currentDate.getDay(); // Sunday = 0, Monday = 1, etc.
     this.dayDB = "";
 
-    if (this.srcURL != null) {
-      this.son.name = "Private URL";
-      this.son.src = this.srcURL;
-    }
-    else {
-      for (let sound of this.soundList) {
-        if (sound.name == this.sound_used) {
-          this.son.name = sound.name;
-          this.son.src = sound.src;
-        }
+   
+    for (let sound of this.soundList) {
+      if (sound.name == this.sound_used) {
+        this.son.name = sound.name;
+        this.son.src = sound.src;
       }
     }
+    
     for (let day of this.days) {
       if (day.checked) {
-        let firstNotificationTime = new Date();
+        let firstNotificationTime = new Date(new Date().getTime());
         let dayDifference = day.dayCode - currentDay;
 
         this.dayDB += day.title + " ";
@@ -170,17 +152,17 @@ export class ClockPage {
         firstNotificationTime.setMinutes(this.chosenMinutes);
         firstNotificationTime.setSeconds(0);
 
-        //to test easily
         firstNotificationTime = new Date(new Date().getTime() + 6000);
+
         let notification = {
           id: 1,
           title: this.nameAlarm,
           text: this.textAlarm,
           trigger: {
-            at: firstNotificationTime,
-            //every: 'minute',
+            firstAt: firstNotificationTime,
+            every: ELocalNotificationTriggerUnit.WEEK,
             //Besoin de count 1000 sinon notifications sonne en boucle
-            //count: 10000
+            count: 5
           },
           smallIcon: 'res//assets/imgs/logo.png',
           sound: this.son.src,
@@ -195,12 +177,15 @@ export class ClockPage {
     // Cancel any existing notifications
     this.localNotifications.cancelAll().then(() => {
 
+      console.log("Notification : ")
+      console.log(this.notifications)
+
       this.localNotifications.schedule(this.notifications);
       console.log("Notification modified");
       this.localNotifications.on('trigger').subscribe(() => {
         this.backgroundMode.wakeUp();
     
-        for (var brightnessValue = 0.0; brightnessValue < 1.0; brightnessValue += 0.1) {
+        for (var brightnessValue = 0.0; brightnessValue < 1.0; brightnessValue += 0.05) {
           this.delay(10000);
           this.brightness.setBrightness(brightnessValue);
         }
@@ -211,7 +196,7 @@ export class ClockPage {
       this.localNotifications.on('click').subscribe(() => {
         this.backgroundMode.wakeUp();
     
-        for (var brightnessValue = 0.0; brightnessValue < 1.0; brightnessValue += 0.1) {
+        for (var brightnessValue = 0.0; brightnessValue < 1.0; brightnessValue += 0.05) {
           this.delay(10000);
           this.brightness.setBrightness(brightnessValue);
         }
@@ -280,13 +265,6 @@ export class ClockPage {
     })
     .catch(error => {
       console.log("Error from selectSoundForUserInDB(): " + error.message);
-    });
-  }
-  insertNewSound(){
-    this.storage.get('current_username').then((userIs) => {
-      //Get Value + insert
-      this.dataBase.insertNewSoundInDataBase(this.nameSound,this.srcURL,userIs);
-      this.getAndDisplaySound(userIs);
     });
   }
 

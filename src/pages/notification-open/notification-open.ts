@@ -48,11 +48,9 @@ export class NotificationOpenPage {
       console.log("this.temperature: " + data.main.temp + " - this.meteo: " + this.meteo);
       this.name = data.name;
       this.ShowResult = true;
-
       this.getCountryFromPosition();
     },
       (error) => {
-        
         let alert = this.alertCtrl.create({
           title: "No internet connection",
           buttons: ['OK']

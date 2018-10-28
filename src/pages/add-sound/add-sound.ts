@@ -28,6 +28,7 @@ export class AddSoundPage {
     private toast: Toast, ) {
   }
 
+
   register() {
     this.storage.get('current_username').then((userIs) => {
       this.databaseUser.insertNewSoundInDataBase(this.name, this.source, userIs);
@@ -36,6 +37,8 @@ export class AddSoundPage {
           console.log('Sound Added');
         });
       let currentIndex = this.navCtrl.getActive().index;
+
+      //Making the return button to the clock list and not the clock seetting page
       this.navCtrl.push(ClockPage).then(() => {
         this.navCtrl.remove(currentIndex);
         this.navCtrl.remove(currentIndex - 1);

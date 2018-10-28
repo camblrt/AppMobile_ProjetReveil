@@ -1,14 +1,8 @@
-import { DatabaseProvider } from './../../providers/database/database';
 import { ClockPage } from './../clock/clock';
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
-/**
- * Generated class for the ClockListPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
+
 
 @IonicPage()
 @Component({
@@ -24,7 +18,6 @@ export class ClockListPage {
 
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
-    public dataBaseProviser: DatabaseProvider,
     private storage: Storage) {
 
     this.name = "No alarm";
@@ -33,9 +26,6 @@ export class ClockListPage {
     this.minutes = "00";
   }
   
-  getFromDB() {
-    this.dataBaseProviser.selectClockFromDataBase();
-  }
   modifyClock() {
     this.navCtrl.push(ClockPage)
   }

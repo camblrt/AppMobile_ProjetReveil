@@ -116,7 +116,6 @@ export class DatabaseProvider {
     return this.db.executeSql('INSERT INTO sound VALUES(?,?,?,?)', [,name, src, user])
       .then(res => {
         this.toast.show('Sound registered', '5000', 'center');
-        console.log("Sound insert in db : " + name + "  user  " + user)
       }).catch(error => {
         console.log("Error from executeSql(INSERT INTO sound): " + error.message);
       });
