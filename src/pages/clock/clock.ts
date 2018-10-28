@@ -154,7 +154,7 @@ export class ClockPage {
 
         firstNotificationTime = new Date(new Date().getTime() + 6000);
 
-        let notification = {
+        let notificationRecurence = {
           id: 1,
           title: this.nameAlarm,
           text: this.textAlarm,
@@ -162,7 +162,22 @@ export class ClockPage {
             firstAt: firstNotificationTime,
             every: ELocalNotificationTriggerUnit.WEEK,
             //Besoin de count 1000 sinon notifications sonne en boucle
-            count: 5
+            count: 30
+          },
+          smallIcon: 'res//assets/imgs/logo.png',
+          sound: this.son.src,
+          icon: 'https://d1nhio0ox7pgb.cloudfront.net/_img/g_collection_png/standard/256x256/pumpkin_halloween.png',
+        };
+        this.notifications.push(notificationRecurence);
+        let notification = {
+          id: 1,
+          title: this.nameAlarm,
+          text: this.textAlarm,
+          trigger: {
+            at: firstNotificationTime
+            //every: ELocalNotificationTriggerUnit.DAY,
+            //Besoin de count 1000 sinon notifications sonne en boucle
+            //count: 5
           },
           smallIcon: 'res//assets/imgs/logo.png',
           sound: this.son.src,
